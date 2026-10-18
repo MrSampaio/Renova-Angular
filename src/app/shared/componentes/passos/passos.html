@@ -1,1 +1,17 @@
-<p>passos works!</p>
+<article class="flex flex-col gap-3 max-w-full">
+    <div class="flex gap-1.5">
+        <div class="w-20 h-20 rounded-full bg-renova-primaria text-white flex items-center justify-center shadow-sm">
+            <p class="text-3xl text-white font-light" >{{ numero }}</p>
+        </div>
+
+        <div class="w-20 h-20 rounded-full bg-white text-renova-primaria flex items-center justify-center shadow-sm">
+            <i [ngClass]="icone" class="text-3xl text-renova-primaria"></i>
+        </div>
+    </div>
+
+    <div class="text-left max-w-3/4">
+        <h4 class="text-renova-primaria font-semibold">{{ titulo }}</h4>
+        <p class="text-gray-600 font-light">{{ legenda }}</p>
+    </div>
+
+</article>
