@@ -4,8 +4,7 @@
   [disabled]="desabilitado" 
   (click)="aoClicar()">
   
-  <!-- O ngClass recebe o nome exato do ícone (ex: fa-user), pois a classe fa-solid já está fixa aqui -->
-  <i *ngIf="icone" [ngClass]="icone"></i>
+  <i [ngClass]="icone"></i>
   
   <span>{{ texto }}</span>
 </button>

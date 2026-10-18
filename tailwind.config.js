@@ -6,7 +6,8 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        'renova-primaria': '#014C30'
+        'renova-primaria': '#014C30',
+        'renova-bg-primario': '#F7F7F1'
         // 'renova-secundaria': '#F59E0B'
       }
     },

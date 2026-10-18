@@ -8,6 +8,7 @@
 /* é assim que o Tailwind v4 registra cores personalizadas */
 @theme {
   --color-renova-primaria: #014C30;
+  --color-renova-bg-primario: #F7F7F1;
 }
 
 /* responsive sizing */
