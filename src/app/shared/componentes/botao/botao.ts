@@ -2,7 +2,7 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 @Component({
-  imports: [],
+  imports: [CommonModule],
   standalone: true,
   selector: 'app-botao',
   styleUrl: './botao.css',
@@ -15,6 +15,9 @@ export class Botao {
   // // recebe a cor ou estilo (ex: 'primary', 'danger', 'success')
   // @Input() variante: string = 'primary';
 
+  @Input() btnClass: string = '';
+
+  @Input() icone: string = ''
   // define se o botão está bloqueado
   @Input() desabilitado: boolean = false;
 

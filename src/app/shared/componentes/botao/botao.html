@@ -1,5 +1,18 @@
 <button 
+  class="flex items-center justify-center gap-2 font-semibold transition-colors w-full h-full"
+  [ngClass]="btnClass"
   [disabled]="desabilitado" 
   (click)="aoClicar()">
-  {{ texto }}
+  
+  <!-- O ngClass recebe o nome exato do ícone (ex: fa-user), pois a classe fa-solid já está fixa aqui -->
+  <i *ngIf="icone" [ngClass]="icone"></i>
+  
+  <span>{{ texto }}</span>
 </button>
+
+<!-- 
+  [ngClass]="{
+    'bg-renova-primaria hover:bg-emerald-900': variante === 'primaria',
+    'bg-green-500 hover:bg-green-600': variante === 'success',
+    'bg-red-500 hover:bg-red-600': variante === 'danger'
+  }" -->
