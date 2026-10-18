@@ -1,7 +1,15 @@
 /* You can add global styles to this file, and also import other style files */
 
 @import 'tailwindcss';
+
  
+@import "tailwindcss";
+
+/* é assim que o Tailwind v4 registra cores personalizadas */
+@theme {
+  --color-renova-primaria: #014C30;
+}
+
 /* responsive sizing */
 html {
     font-size: 60%;
