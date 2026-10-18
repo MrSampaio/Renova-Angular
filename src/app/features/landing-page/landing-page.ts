@@ -1,9 +1,11 @@
 import { Component } from '@angular/core';
-import { Botao } from '../../shared/componentes/botao/botao';
+import { LandingPageNavbar } from '../../layout/landing-page-navbar/landing-page-navbar';
+import { LandingPageHero } from '../../layout/landing-page-hero/landing-page-hero';
 
 @Component({
   imports: [
-    Botao
+    LandingPageNavbar,
+    LandingPageHero
   ],
   selector: 'app-landing-page',
   styleUrl: './landing-page.css',
