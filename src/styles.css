@@ -1,3 +1,22 @@
 /* You can add global styles to this file, and also import other style files */
 
 @import 'tailwindcss';
+ 
+/* responsive sizing */
+html {
+    font-size: 60%;
+}
+
+/* Tablet and larger */
+@media (min-width: 768px) {
+    html {
+        font-size: 80%;
+    }
+}
+
+/* Desktop and larger */
+@media (min-width: 1024px) {
+    html {
+        font-size: 100%;
+    }
+}
