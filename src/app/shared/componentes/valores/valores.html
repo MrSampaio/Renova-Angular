@@ -1,23 +1,9 @@
-<section class="flex flex-col gap-4 justify-center items-center text-center">
+<article class="flex flex-col gap-4 justify-center items-center text-center max-w-full">
     <div class="w-20 h-20 rounded-full bg-renova-bg-primario text-white flex items-center justify-center shadow-sm">
         <i *ngIf="icone" [ngClass]="icone" class="text-3xl text-renova-primaria "></i>
-
-        
     </div>
-    <div class="flex flex-col">
-        <h4 [ngClass]="titulo" class="text-renova-primaria font-semibold"></h4>
-        <p [ngClass]="legenda" class="text-gray-600 font-light"></p>
+    <div class="flex flex-col justify-center items-center flex-wrap text-center">
+        <h4 class="text-renova-primaria font-semibold">{{ titulo }}</h4>
+        <p class="text-gray-600 font-light text-wrap max-w-3/5">{{ legenda }}</p>
     </div>
-</section>
-
-<!-- 
-<button 
-  class="flex items-center justify-center gap-2 font-semibold transition-colors w-full h-full"
-  [ngClass]="btnClass"
-  [disabled]="desabilitado" 
-  (click)="aoClicar()">
-  
-  <i *ngIf="icone" [ngClass]="icone"></i>
-  
-  <span>{{ texto }}</span> -->
-<!-- </button> -->
+</article>
