@@ -1,0 +1,74 @@
+<section class="w-full py-10 lg:py-16">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
+
+        <app-valores
+            icone="fa-solid fa-basket-shopping"
+            titulo="Compre com propósito"
+            legenda="Encontre roupas de qualidade e preços acessíveis">
+        </app-valores>
+
+        <app-valores
+            icone="fa-solid fa-heart"
+            titulo="Ajude nossa missão"
+            legenda="Toda compra contribui com os projetos da igreja">
+        </app-valores>
+
+        <app-valores
+            icone="fa-solid fa-leaf"
+            titulo="Moda sustentável"
+            legenda="Dê uma nova vida às roupas e cuide do planeta">
+        </app-valores>
+
+        <app-valores
+            icone="fa-solid fa-users"
+            titulo="Faça parte"
+            legenda="Juntos, vestimos esperança e transformamos realidades">
+        </app-valores>
+
+    </div>
+</section>
+
+
+<section class="w-full py-10 lg:py-16 bg-renova-bg-primario">
+    <div class="flex flex-col gap-2 items-center justify-center text-center pb-8 lg:pb-12">
+        <div class="h-0.5 w-10 bg-renova-primaria"></div>
+        
+        <h4 class="text-gray-600 font-light text-xl sm:text-2xl">Como funciona?</h4>
+        <p class="text-renova-primaria font-medium text-2xl sm:text-3xl">É muito simples!</p>
+    </div>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
+
+        <app-passos
+            numero="1"
+            [temSeta]="true"
+            icone="fa-solid fa-user"
+            titulo="Crie sua conta"
+            legenda="Cadastre-se em poucos minutos e acesse o bazar">
+        </app-passos>
+
+        <app-passos
+            numero="2"
+            [temSeta]="true"
+            icone="fa-solid fa-bag-shopping"
+            titulo="Escolha suas peças"
+            legenda="Navegue pelos produtos e adicione ao carrinho">
+        </app-passos>
+
+        <app-passos
+            numero="3"
+            [temSeta]="true"
+            icone="fa-solid fa-credit-card"
+            titulo="Finalize seu pedido"
+            legenda="Realize a compra de forma segura e prática">
+        </app-passos>
+        
+        <app-passos
+            numero="4"
+            icone="fa-solid fa-heart"
+            titulo="Faça o bem"
+            legenda="Sua compra apoia os projetos da igreja">
+        </app-passos>
+
+    </div>
+</section>

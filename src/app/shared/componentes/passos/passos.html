@@ -1,0 +1,22 @@
+<article class="relative flex flex-col gap-3 w-full max-w-[240px] mx-auto">
+    
+    <div class="flex gap-1.5 items-center">
+        <div class="w-14 h-14 sm:w-16 sm:h-16 shrink-0 rounded-full bg-renova-primaria text-white flex items-center justify-center shadow-sm">
+            <p class="text-2xl sm:text-3xl text-white font-light">{{ numero }}</p>
+        </div>
+
+        <div class="w-14 h-14 sm:w-16 sm:h-16 shrink-0 rounded-full bg-white text-renova-primaria flex items-center justify-center shadow-sm border border-gray-100">
+            <i [ngClass]="icone" class="text-2xl sm:text-3xl text-renova-primaria"></i>
+        </div>
+    </div>
+
+    <div class="text-left w-3/4 mt-1">
+        <h4 class="text-renova-primaria font-bold text-lg leading-tight">{{ titulo }}</h4>
+        <p class="text-gray-600 font-medium text-sm mt-1">{{ legenda }}</p>
+    </div>
+
+    <i *ngIf="temSeta" 
+        class="fa-solid fa-arrow-right absolute top-4 sm:top-5 -right-6 lg:-right-8 text-renova-primaria text-xl hidden lg:block">
+    </i>
+
+</article>
