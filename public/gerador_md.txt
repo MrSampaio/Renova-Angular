@@ -1,0 +1,31 @@
+#!/bin/bash
+
+# Remove o arquivo anterior, se existir
+rm -f CodigoCompleto.md
+
+# Variável para rastrear o diretório atual durante o loop
+current_dir=""
+
+# Encontra os arquivos .swift e ordena para agrupar os diretórios
+find . -name "*.swift" | sort | while read -r filepath; do
+    # Extrai o caminho da pasta e o nome exato do arquivo
+    dirpath=$(dirname "$filepath")
+    filename=$(basename "$filepath")
+    
+    # Se o diretório for diferente do anterior, cria uma nova seção no documento
+    if [ "$dirpath" != "$current_dir" ]; then
+        echo "# 📂 Diretório: $dirpath" >> CodigoCompleto.md
+        echo "" >> CodigoCompleto.md
+        current_dir="$dirpath"
+    fi
+    
+    # Adiciona o arquivo como uma subseção
+    echo "### 📄 Arquivo: $filename" >> CodigoCompleto.md
+    echo '```swift' >> CodigoCompleto.md
+    cat "$filepath" >> CodigoCompleto.md
+    
+    # É importante garantir que o arquivo lido termine com quebra de linha antes de fechar o bloco de código
+    echo "" >> CodigoCompleto.md 
+    echo '```' >> CodigoCompleto.md
+    echo -e "\n---\n" >> CodigoCompleto.md
+done

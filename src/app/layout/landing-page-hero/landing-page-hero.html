@@ -1,5 +1,4 @@
 <main class="w-full min-h-[600px] flex justify-around items-center bg-[url('/hero.png')] bg-cover bg-center bg-no-repeat">
-    
     <div class="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-20">
         <div class="flex flex-col gap-4 font-extrabold w-full md:max-w-xl items-start">
             
@@ -17,14 +16,14 @@
             </p>
             
             <div class="w-full sm:w-auto mt-2 flex flex-col gap-2.5">
-                <app-botao
+                <app-button
                     btnClass="w-full sm:w-auto cursor-pointer bg-renova-primaria text-white rounded-xl px-4 py-2 sm:px-6 sm:py-3 text-sm sm:text-base shadow-md border-2 border-transparent transition-all duration-300 hover:bg-white hover:text-renova-primaria hover:border-renova-primaria"
-                    icone="fa-solid fa-right-to-bracket"
-                    texto="Entrar ou Cadastrar">
-                </app-botao>
+                    icon="fa-solid fa-right-to-bracket"
+                    text="Entrar ou Cadastrar"
+                    (click)="navigateToLogin()">
+                </app-button>
                 <p class="text-gray-600 font-light">Já tem uma conta? Faça seu login</p>
             </div>
-            
         </div>
     </div>
 
