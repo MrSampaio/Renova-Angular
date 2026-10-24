@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
-import { Valores } from '../../shared/componentes/valores/valores';
-import { Passos } from '../../shared/componentes/passos/passos';
+import { Valores } from '../../shared/components/valores/valores';
+import { Passos } from '../../shared/components/passos/passos';
 
 
 @Component({

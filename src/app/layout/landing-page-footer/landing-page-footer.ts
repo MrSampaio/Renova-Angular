@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
-import { Botao } from '../../shared/componentes/botao/botao';
+import { Button } from '../../shared/components/button/button';
 
 @Component({
   imports: [
-    Botao
+    Button
   ],
   selector: 'app-landing-page-footer',
   styleUrl: './landing-page-footer.css',

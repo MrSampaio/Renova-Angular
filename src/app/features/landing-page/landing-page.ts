@@ -4,6 +4,8 @@ import { LandingPageHero } from '../../layout/landing-page-hero/landing-page-her
 import { LandingPageInfosSection } from '../../layout/landing-page-infos-section/landing-page-infos-section';
 import { LandingPageFooter } from '../../layout/landing-page-footer/landing-page-footer';
 
+
+
 @Component({
   imports: [
     LandingPageNavbar,
@@ -15,4 +17,5 @@ import { LandingPageFooter } from '../../layout/landing-page-footer/landing-page
   styleUrl: './landing-page.css',
   templateUrl: './landing-page.html',
 })
-export class LandingPage {}
+export class LandingPage {
+}

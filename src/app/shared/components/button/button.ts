@@ -4,29 +4,29 @@ import { CommonModule } from '@angular/common';
 @Component({
   imports: [CommonModule],
   standalone: true,
-  selector: 'app-botao',
-  styleUrl: './botao.css',
-  templateUrl: './botao.html',
+  selector: 'app-button',
+  styleUrl: './button.css',
+  templateUrl: './button.html',
 })
-export class Botao {
+export class Button {
   // o texto que vai aparecer no botão
-  @Input() texto: string = 'Clique aqui';
+  @Input() text: string = 'Clique aqui';
 
   // // recebe a cor ou estilo (ex: 'primary', 'danger', 'success')
   // @Input() variante: string = 'primary';
 
   @Input() btnClass: string = '';
 
-  @Input() icone: string = ''
+  @Input() icon: string = ''
   // define se o botão está bloqueado
-  @Input() desabilitado: boolean = false;
+  @Input() disabled: boolean = false;
 
   // emite um evento para o componente pai quando clicado
-  @Output() acaoClique = new EventEmitter<void>();
+  @Output() onClick = new EventEmitter();
 
-  aoClicar() {
-    if (!this.desabilitado) {
-      this.acaoClique.emit();
-    }
-  }
+  // onClickEvent() {
+  //   if (!this.disabled) {
+  //     this.onClick.emit();
+  //   }
+  // }
 }

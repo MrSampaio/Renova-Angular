@@ -1,12 +1,12 @@
 <button 
   class="flex items-center justify-center gap-2 font-semibold transition-colors w-full h-full"
   [ngClass]="btnClass"
-  [disabled]="desabilitado" 
-  (click)="aoClicar()">
+  [disabled]="disabled" 
+  (click)="onClick()">
   
-  <i [ngClass]="icone"></i>
+  <i [ngClass]="icon"></i>
   
-  <span>{{ texto }}</span>
+  <span>{{ text }}</span>
 </button>
 
 <!-- 
