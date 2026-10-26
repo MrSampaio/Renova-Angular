@@ -24,9 +24,9 @@ export class Button {
   // emite um evento para o componente pai quando clicado
   @Output() onClick = new EventEmitter();
 
-  // onClickEvent() {
-  //   if (!this.disabled) {
-  //     this.onClick.emit();
-  //   }
-  // }
+  onClickEvent() {
+    if (!this.disabled) {
+      this.onClick.emit();
+    }
+  }
 }
