@@ -14,19 +14,3 @@ import { RouterOutlet } from '@angular/router'; // 1. Importe o RouterOutlet
 export class App {
   title = 'renova-frontend';
 }
-
-
-// @Component({
-//   imports: [
-//     LandingPage,
-//     LandingPageNavbar,
-//     LandingPageFooter
-
-//   ],
-//   selector: 'app-root',
-//   styleUrl: './app.css',
-//   templateUrl: './app.html',
-// })
-// export class App {
-//   protected readonly title = signal('Renova-Angular');
-// }
