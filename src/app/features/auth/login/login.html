@@ -6,11 +6,15 @@
         <p class="text-gray-500 text-[10px] sm:text-xs tracking-widest uppercase mt-1">Bazar Beneficente • Moda Sustentável</p>
     </div>
 
-    <form class="w-full max-w-md bg-white rounded-2xl shadow-xl p-6 sm:p-10 flex flex-col gap-6 z-10">
+    <form (ngSubmit)="login()" class="w-full max-w-md bg-white rounded-2xl shadow-xl p-6 sm:p-10 flex flex-col gap-6 z-10">
         
         <div class="text-center mb-2">
             <h2 class="text-3xl font-bold text-gray-800 mb-2">Faça seu login</h2>
             <p class="text-gray-500 text-sm">Acesse sua conta para continuar.</p>
+        </div>
+
+        <div *ngIf="errorMessage()" class="bg-red-100 border border-red-400 text-red-700 px-4 py-2 rounded text-sm text-center">
+            {{ errorMessage() }}
         </div>
 
         <div class="flex flex-col gap-2">
@@ -18,7 +22,7 @@
             <div class="flex items-center border border-gray-300 rounded-lg px-3 py-2.5 transition-colors focus-within:border-renova-primaria focus-within:ring-1 focus-within:ring-renova-primaria">
                 <i class="fa-regular fa-envelope text-gray-400 w-6 text-center"></i>
                 <div class="h-5 w-px bg-gray-300 mx-2"></div>
-                <input type="email" id="email" placeholder="seu@email.com" class="w-full bg-transparent outline-none text-gray-700 placeholder-gray-400 text-sm">
+                <input type="email" id="email" name="email" [(ngModel)]="loginData.email" placeholder="seu@email.com" class="w-full bg-transparent outline-none text-gray-700 placeholder-gray-400 text-sm">
             </div>
         </div>
 
@@ -27,7 +31,7 @@
             <div class="flex items-center border border-gray-300 rounded-lg px-3 py-2.5 transition-colors focus-within:border-renova-primaria focus-within:ring-1 focus-within:ring-renova-primaria">
                 <i class="fa-solid fa-lock text-gray-400 w-6 text-center"></i>
                 <div class="h-5 w-px bg-gray-300 mx-2"></div>
-                <input type="password" id="password" placeholder="Sua senha" class="w-full bg-transparent outline-none text-gray-700 placeholder-gray-400 text-sm">
+                <input type="password" id="password" name="password" [(ngModel)]="loginData.password" placeholder="Sua senha" class="w-full bg-transparent outline-none text-gray-700 placeholder-gray-400 text-sm">
                 <button type="button" class="text-gray-400 hover:text-gray-600 focus:outline-none ml-2 cursor-pointer">
                     <i class="fa-solid fa-eye-slash"></i>
                 </button>
@@ -35,8 +39,17 @@
         </div>
 
         <div class="flex flex-col gap-3 mt-4">
-            <button type="submit" class="w-full cursor-pointer bg-renova-primaria text-white rounded-lg py-3 text-sm font-medium transition-colors hover:bg-opacity-90 flex justify-center items-center gap-2 shadow-md">
-                Entrar <i class="fa-solid fa-arrow-right"></i>
+            
+            <button 
+                type="submit" 
+                [disabled]="isLoading()"
+                class="w-full cursor-pointer bg-renova-primaria text-white rounded-lg py-3 text-sm font-medium transition-colors hover:bg-opacity-90 disabled:bg-gray-400 flex justify-center items-center gap-2 shadow-md">
+                
+                <ng-container *ngIf="!isLoading()">
+                    Entrar <i class="fa-solid fa-arrow-right"></i>
+                </ng-container>
+                
+                <span *ngIf="isLoading()">Aguarde...</span>
             </button>
             
             <button type="button" class="w-full cursor-pointer bg-white border border-renova-primaria text-renova-primaria rounded-lg py-3 text-sm font-medium transition-colors hover:bg-gray-50 flex justify-center items-center gap-2">
