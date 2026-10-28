@@ -1,4 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, signal} from '@angular/core';
+import { signUpRequest } from './sign-up-request';
+import { UserRole } from '../../shared/interfaces/user-role';
 
 @Component({
   imports: [],
@@ -6,4 +8,20 @@ import { Component } from '@angular/core';
   styleUrl: './sign-up.css',
   templateUrl: './sign-up.html',
 })
-export class SignUp {}
+export class SignUp {
+
+  errorMessage = signal('')
+  registerData: signUpRequest = {
+    name: '',
+    email: '',
+    password: '',
+    phone: '',
+    role: UserRole.CUSTOMER
+  }
+
+  confirmPassword: string = '';
+
+  signUp(): void {
+
+  }
+}
