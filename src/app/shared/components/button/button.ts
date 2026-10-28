@@ -15,6 +15,8 @@ export class Button {
   // // recebe a cor ou estilo (ex: 'primary', 'danger', 'success')
   // @Input() variante: string = 'primary';
 
+  @Input() type: 'button' | 'submit' = 'button';
+
   @Input() btnClass: string = '';
 
   @Input() icon: string = ''

@@ -1,11 +1,11 @@
 <button 
+  [type]="type"
   class="flex items-center justify-center gap-2 font-semibold transition-colors w-full h-full"
   [ngClass]="btnClass"
   [disabled]="disabled" 
   (click)="onClickEvent()">
   
-  <i [ngClass]="icon"></i>
-  
+  <i *ngIf="icon" [ngClass]="icon"></i>
   <span>{{ text }}</span>
 </button>
 
