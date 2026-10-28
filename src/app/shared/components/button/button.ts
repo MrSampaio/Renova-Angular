@@ -22,11 +22,11 @@ export class Button {
   @Input() disabled: boolean = false;
 
   // emite um evento para o componente pai quando clicado
-  @Output() onClick = new EventEmitter();
+  @Output() onClick = new EventEmitter<any>();
 
-  // onClickEvent() {
-  //   if (!this.disabled) {
-  //     this.onClick.emit();
-  //   }
-  // }
+  onClickEvent() {
+    if (!this.disabled) {
+      this.onClick.emit();
+    }
+  }
 }

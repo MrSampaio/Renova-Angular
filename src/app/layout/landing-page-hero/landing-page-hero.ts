@@ -14,6 +14,6 @@ export class LandingPageHero {
    constructor(private router: Router) {}
 
   navigateToLogin() {
-    this.router.navigate(['auth/login']);
+    this.router.navigate(['/login']);
   }
 }

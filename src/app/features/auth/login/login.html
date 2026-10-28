@@ -1,16 +1,11 @@
-<!-- O min-h-screen garante que a página ocupe 100% da altura da tela, centralizando tudo no meio -->
 <main class="min-h-screen w-full flex flex-col justify-center items-center bg-renova-bg-primario bg-[url('/fundo-login.png')] bg-cover bg-center bg-no-repeat px-4 py-8 relative">
 
-    <!-- 1. Cabeçalho / Logo -->
     <div class="flex flex-col items-center mb-8 text-center z-10">
-        <!-- Substitua pelo caminho real da logo com as mãos e a cruz -->
         <img src="/logo-renova.png" alt="Logo Renova Bazar" class="h-20 mb-2">
         <h1 class="text-renova-primaria font-bold text-2xl tracking-widest uppercase">Renova Bazar</h1>
         <p class="text-gray-500 text-[10px] sm:text-xs tracking-widest uppercase mt-1">Bazar Beneficente • Moda Sustentável</p>
     </div>
 
-    <!-- 2. Cartão do Formulário -->
-    <!-- w-full max-w-md limita a largura no PC, mas deixa ocupar a tela toda no celular -->
     <form class="w-full max-w-md bg-white rounded-2xl shadow-xl p-6 sm:p-10 flex flex-col gap-6 z-10">
         
         <div class="text-center mb-2">
@@ -18,28 +13,21 @@
             <p class="text-gray-500 text-sm">Acesse sua conta para continuar.</p>
         </div>
 
-        <!-- Input Email -->
         <div class="flex flex-col gap-2">
             <label for="email" class="text-sm font-semibold text-gray-700">Email</label>
             <div class="flex items-center border border-gray-300 rounded-lg px-3 py-2.5 transition-colors focus-within:border-renova-primaria focus-within:ring-1 focus-within:ring-renova-primaria">
-                <!-- Ícone à esquerda -->
                 <i class="fa-regular fa-envelope text-gray-400 w-6 text-center"></i>
-                <!-- Linha divisória vertical -->
                 <div class="h-5 w-px bg-gray-300 mx-2"></div>
                 <input type="email" id="email" placeholder="seu@email.com" class="w-full bg-transparent outline-none text-gray-700 placeholder-gray-400 text-sm">
             </div>
         </div>
 
-        <!-- Input Senha -->
         <div class="flex flex-col gap-2">
             <label for="password" class="text-sm font-semibold text-gray-700">Senha</label>
             <div class="flex items-center border border-gray-300 rounded-lg px-3 py-2.5 transition-colors focus-within:border-renova-primaria focus-within:ring-1 focus-within:ring-renova-primaria">
-                <!-- Ícone à esquerda -->
                 <i class="fa-solid fa-lock text-gray-400 w-6 text-center"></i>
-                <!-- Linha divisória vertical -->
                 <div class="h-5 w-px bg-gray-300 mx-2"></div>
                 <input type="password" id="password" placeholder="Sua senha" class="w-full bg-transparent outline-none text-gray-700 placeholder-gray-400 text-sm">
-                <!-- Ícone de revelar senha à direita -->
                 <button type="button" class="text-gray-400 hover:text-gray-600 focus:outline-none ml-2 cursor-pointer">
                     <i class="fa-solid fa-eye-slash"></i>
                 </button>
