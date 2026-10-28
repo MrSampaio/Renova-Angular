@@ -40,21 +40,21 @@
 
         <div class="flex flex-col gap-3 mt-4">
             
-            <button 
-                type="submit" 
+            <app-button
+                type="submit"
                 [disabled]="isLoading()"
-                class="w-full cursor-pointer bg-renova-primaria text-white rounded-lg py-3 text-sm font-medium transition-colors hover:bg-opacity-90 disabled:bg-gray-400 flex justify-center items-center gap-2 shadow-md">
-                
-                <ng-container *ngIf="!isLoading()">
-                    Entrar <i class="fa-solid fa-arrow-right"></i>
-                </ng-container>
-                
-                <span *ngIf="isLoading()">Aguarde...</span>
-            </button>
+                [text]="isLoading() ? 'Aguarde...' : 'Entrar'"
+                [icon]="isLoading() ? '' : 'fa-solid fa-arrow-right'"
+                btnClass="bg-renova-primaria cursor-pointer text-white rounded-lg py-3 text-sm hover:bg-opacity-90 disabled:bg-gray-400 shadow-md">
+            </app-button>
             
-            <button type="button" class="w-full cursor-pointer bg-white border border-renova-primaria text-renova-primaria rounded-lg py-3 text-sm font-medium transition-colors hover:bg-gray-50 flex justify-center items-center gap-2">
-                <i class="fa-regular fa-user"></i> Cadastre-se aqui
-            </button>
+            <app-button
+                type="button"
+                text="Cadastre-se aqui"
+                icon="fa-regular fa-user"
+                btnClass="bg-white border cursor-pointer border-renova-primaria text-renova-primaria rounded-lg py-3 text-sm hover:bg-gray-50"
+                (onClick)="navigateToSignUp()">
+            </app-button>
         </div>
     </form>
 

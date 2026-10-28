@@ -4,11 +4,12 @@ import { AuthRequest } from './auth-request';
 import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { Button } from '../../../shared/components/button/button';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [FormsModule, CommonModule],
+  imports: [FormsModule, CommonModule, Button],
   templateUrl: './login.html',
   styleUrl: './login.css'
 })
@@ -23,6 +24,10 @@ export class Login {
 
   errorMessage = signal('');
   isLoading = signal(false);
+
+  navigateToSignUp(){
+    this.router.navigate(['/sign-up']);
+  }
 
   login(): void {
     this.isLoading.set(true);

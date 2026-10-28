@@ -13,6 +13,11 @@ export const routes: Routes = [
     title: 'Login | Renova Bazar'
   },
   {
+    path: 'sign-up',
+    loadComponent: () => import('./features/sign-up/sign-up').then(c => c.SignUp),
+    title: 'Faça parte do Renova'
+  },
+  {
     path: '**',
     redirectTo: '',
     pathMatch: 'full'
