@@ -10,6 +10,7 @@ import { Observable } from 'rxjs';
 //@Service()
 @Injectable({
     providedIn: 'root'
+    
 })
 
 export class AuthService {
