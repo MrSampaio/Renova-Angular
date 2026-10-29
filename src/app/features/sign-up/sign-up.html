@@ -75,17 +75,18 @@
                 [disabled]="isLoading()"
                 [text]="isLoading() ? 'Aguarde...' : 'Criar conta'"
                 [icon]="isLoading() ? '' : 'fa-solid fa-arrow-right'"
-                btnClass="bg-renova-primaria text-white rounded-lg py-3 text-sm hover:bg-opacity-90 disabled:bg-gray-400 shadow-md">
+                btnClass="bg-renova-primaria text-white cursor-pointer rounded-lg py-3 text-sm hover:bg-opacity-90 disabled:bg-gray-400 shadow-md">
             </app-button>
             
             <app-button
                 type="button"
                 text="Já tenho uma conta"
                 icon="fa-regular fa-user"
-                btnClass="bg-white border border-renova-primaria text-renova-primaria rounded-lg py-3 text-sm hover:bg-gray-50">
+                (onClick)="navigateToLogin()"
+                btnClass="bg-white border cursor-pointer border-renova-primaria text-renova-primaria rounded-lg py-3 text-sm hover:bg-gray-50">
             </app-button>
 
-            <!-- (onClick)="irParaLogin()"> -->
+            
         </div>
     </form>
 
