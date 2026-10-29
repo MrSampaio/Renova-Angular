@@ -1,10 +1,10 @@
 import { Component, signal } from '@angular/core';
-import { AuthService } from '../../../shared/services/auth-service';
-import { AuthRequest } from '../../../shared/interfaces/auth-request';
+import { AuthService } from '../../shared/services/auth-service';
+import { AuthRequest } from '../../shared/interfaces/auth-request';
 import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { Button } from '../../../shared/components/button/button';
+import { Button } from '../../shared/components/button/button';
 
 @Component({
   selector: 'app-login',
@@ -34,11 +34,10 @@ export class Login {
     this.errorMessage.set('');
 
     this.authService.login(this.loginData).subscribe({
-      next: (response) => {
-        localStorage.setItem('token', response.token);
-         this.isLoading.set(false);
-
-        this.router.navigate(['/']);
+      next: () => {
+        // localStorage.setItem('token', response.token);
+        this.isLoading.set(false);
+        this.router.navigate(['/catalog']);
       },
       error: (error) => {
         this.isLoading.set(false);
