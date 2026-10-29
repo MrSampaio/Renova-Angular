@@ -54,7 +54,7 @@ export class SignUp {
     this.authService.register(this.registerData).subscribe({
       next: () => {
         this.isLoading.set(false);
-        this.router.navigate(['/login']);
+        this.router.navigate(['/catalog']);
       },
       error: (error) => {
         this.isLoading.set(false);
