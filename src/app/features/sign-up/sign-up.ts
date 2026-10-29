@@ -2,8 +2,10 @@ import { Component, signal } from '@angular/core';
 import { signUpRequest } from './sign-up-request';
 import { UserRole } from '../../shared/interfaces/user-role';
 import { Button } from '../../shared/components/button/button';
-import { FormsModule } from '@angular/forms'; // 1. Importe o FormsModule
+import { Router } from '@angular/router';
+import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { AuthService } from '../../shared/services/auth-service';
 
 @Component({
   imports: [Button, FormsModule, CommonModule],
@@ -16,8 +18,7 @@ export class SignUp {
   errorMessage = signal('')
   isLoading = signal(false)
 
-  constructor(){}
-
+  constructor(private authService: AuthService, private router: Router){}
 
   registerData: signUpRequest = {
     name: '',
@@ -31,10 +32,35 @@ export class SignUp {
 
   confirmPassword: string = '';
 
-
+  navigateToLogin(): void {
+   this.router.navigate(['/login']);
+  }
 
   signUp(): void {
-    // this.isLoading = true;
-    // this.errorMessage = '';
+
+    if (this.registerData.password !== this.confirmPassword) {
+      this.errorMessage.set('As senhas não coincidem. Verifique e tente novamente.');
+      return;
+    }
+
+    if (!this.registerData.name || !this.registerData.email) {
+      this.errorMessage.set('Por favor, preencha todos os campos obrigatórios.');
+      return;
+    }
+
+    this.isLoading.set(true);
+    this.errorMessage.set('');
+
+    this.authService.register(this.registerData).subscribe({
+      next: () => {
+        this.isLoading.set(false);
+        this.router.navigate(['/login']);
+      },
+      error: (error) => {
+        this.isLoading.set(false);
+        this.errorMessage.set('Erro ao realizar o cadastro. Verifique os dados e tente novamente.');
+        console.error(error);
+      }
+    });
   }
 }
