@@ -4,12 +4,12 @@
          transition-all duration-300
          hover:-translate-y-1 hover:shadow-lg"
 >
-  <!-- Imagem da peça -->
+  <!-- Imagem do produto -->
   <div class="relative aspect-[4/5] w-full overflow-hidden bg-slate-100">
-    @if (!imageHasError && Product.imageUrl) {
+    @if (!imageHasError && product.imageUrl) {
       <img
-        [ngSrc]="Product.imageUrl"
-        [alt]="Product.productName"
+        [ngSrc]="product.imageUrl"
+        [alt]="product.productName"
         fill
         sizes="(max-width: 639px) 100vw,
                (max-width: 1023px) 50vw,
@@ -35,43 +35,39 @@
       </div>
     }
 
-    <!-- Status da peça -->
+    <!-- Status do produto -->
     @if (!isAvailable) {
       <span
         class="absolute left-3 top-3 rounded-full bg-white/95
                px-3 py-1.5 text-xs font-bold uppercase tracking-wide
                text-slate-700 shadow-sm"
       >
-        {{ Product.status === 'RESERVED' ? 'Reservada' : 'Vendida' }}
+        {{ product.status === 'RESERVED' ? 'Reservada' : 'Vendida' }}
       </span>
     }
   </div>
 
-  <!-- Conteúdo do card -->
+  <!-- Informações do produto -->
   <div class="flex flex-1 flex-col p-4 sm:p-5">
     <div class="flex-1">
-      <!-- Título -->
       <h2
         class="line-clamp-2 text-base font-bold leading-snug
                text-slate-900 sm:text-lg"
-        [title]="Product.productName"
+        [title]="product.productName"
       >
-        {{ Product.productName }}
+        {{ product.productName }}
       </h2>
 
-      <!-- Categoria -->
       <p class="mt-1 text-sm font-medium text-slate-500">
-        {{ Product.category }}
+        {{ product.category }}
       </p>
 
-      <!-- Preço -->
       <p
         class="mt-3 text-xl font-bold text-renova-primaria sm:text-2xl"
       >
-        {{ Product.price | currency:'BRL':'symbol':'1.2-2':'pt-BR' }}
+        {{ product.price | currency:'BRL':'symbol':'1.2-2' }}
       </p>
 
-      <!-- Tamanho único da peça -->
       <div class="mt-4 flex flex-wrap items-center gap-2">
         <span class="text-sm font-medium text-slate-600">
           Tamanho:
@@ -82,12 +78,11 @@
                  rounded-lg bg-slate-100 px-3 py-1.5
                  text-sm font-bold text-slate-800"
         >
-          {{ Product.size }}
+          {{ product.size }}
         </span>
       </div>
     </div>
 
-    <!-- Botão reutilizável -->
     <div class="mt-5 h-12 w-full">
       <app-button
         [text]="buttonText"

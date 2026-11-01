@@ -5,7 +5,12 @@ import {
   Input,
   Output,
 } from '@angular/core';
-import { CurrencyPipe, NgOptimizedImage } from '@angular/common';
+
+import {
+  CurrencyPipe,
+  NgOptimizedImage,
+} from '@angular/common';
+
 import { Button } from '../button/button';
 import { Product } from '../../interfaces/product-model';
 
@@ -22,18 +27,18 @@ import { Product } from '../../interfaces/product-model';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProductCard {
-  @Input({ required: true }) Product!: Product;
+  @Input({ required: true }) product!: Product;
 
   @Output() addToCart = new EventEmitter<Product>();
 
   imageHasError = false;
 
   get isAvailable(): boolean {
-    return this.Product.status === 'AVAILABLE';
+    return this.product.status === 'AVAILABLE';
   }
 
   get buttonText(): string {
-    switch (this.Product.status) {
+    switch (this.product.status) {
       case 'RESERVED':
         return 'Peça reservada';
 
@@ -67,7 +72,7 @@ export class ProductCard {
       return;
     }
 
-    this.addToCart.emit(this.Product);
+    this.addToCart.emit(this.product);
   }
 
   onImageError(): void {
