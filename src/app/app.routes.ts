@@ -9,13 +9,18 @@ export const routes: Routes = [
   },
   { 
     path: 'login', 
-    loadComponent: () => import('./features/auth/login/login').then(c => c.Login),
+    loadComponent: () => import('./features/login/login').then(c => c.Login),
     title: 'Login | Renova Bazar'
   },
   {
     path: 'sign-up',
     loadComponent: () => import('./features/sign-up/sign-up').then(c => c.SignUp),
     title: 'Faça parte do Renova'
+  },
+  {
+    path: 'catalog',
+    loadComponent: () => import('./features/catalog/catalog').then(c => c.Catalog),
+    title: 'Produtos'
   },
   {
     path: '**',
