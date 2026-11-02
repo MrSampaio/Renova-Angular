@@ -1,4 +1,3 @@
-import { Service } from '@angular/core';
 import { Injectable } from '@angular/core';
 import { AuthRequest } from '../interfaces/auth-request';
 import { LoginResponse } from '../../features/login/login-response';
@@ -6,8 +5,6 @@ import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../environments/environment.development';
 import { Observable } from 'rxjs';
 import { signUpRequest } from '../../features/sign-up/sign-up-request';
-
-//@Service()
 @Injectable({
     providedIn: 'root'  
 })
