@@ -1,5 +1,6 @@
 <section class="min-h-screen bg-stone-50 px-4 py-8 sm:px-6 lg:px-8">
   <div class="mx-auto max-w-7xl">
+
     <header class="mb-8">
       <h1 class="text-2xl font-bold text-slate-900 sm:text-3xl">
         Catálogo
@@ -10,14 +11,60 @@
       </p>
     </header>
 
-    @if (products.length > 0) {
+    @if (isLoading()) {
+      <div class="flex min-h-64 items-center justify-center">
+        <div
+          class="flex flex-col items-center gap-3 text-renova-primaria"
+          role="status"
+          aria-live="polite"
+        >
+          <i
+            class="fa-solid fa-spinner animate-spin text-3xl"
+            aria-hidden="true"
+          ></i>
+
+          <p class="text-sm font-medium">
+            Carregando produtos...
+          </p>
+        </div>
+      </div>
+    } @else if (errorMessage()) {
+      <div
+        class="rounded-2xl border border-red-200 bg-red-50
+               px-6 py-10 text-center"
+        role="alert"
+      >
+        <i
+          class="fa-solid fa-circle-exclamation text-3xl text-red-500"
+          aria-hidden="true"
+        ></i>
+
+        <p class="mt-3 font-medium text-red-700">
+          {{ errorMessage() }}
+        </p>
+
+        <button
+          type="button"
+          class="mt-5 rounded-lg bg-red-600 px-4 py-2
+                 font-semibold text-white transition-colors
+                 hover:bg-red-700
+                 focus-visible:outline-none
+                 focus-visible:ring-2
+                 focus-visible:ring-red-600
+                 focus-visible:ring-offset-2"
+          (click)="loadProducts()"
+        >
+          Tentar novamente
+        </button>
+      </div>
+    } @else if (products().length > 0) {
       <div
         class="grid grid-cols-1 gap-5
                min-grid-cols-2
                md:grid-cols-3
                xl:grid-cols-4"
       >
-        @for (product of products; track product.productId) {
+        @for (product of products(); track product.productId) {
           <app-product-card
             [product]="product"
             (addToCart)="onAddToCart($event)"
@@ -43,5 +90,6 @@
         </p>
       </div>
     }
+
   </div>
 </section>

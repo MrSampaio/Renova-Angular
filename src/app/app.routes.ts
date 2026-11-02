@@ -20,7 +20,8 @@ export const routes: Routes = [
   {
     path: 'catalog',
     loadComponent: () => import('./features/catalog/catalog').then(c => c.Catalog),
-    title: 'Produtos'
+    title: 'Produtos',
+    
   },
   {
     path: '**',

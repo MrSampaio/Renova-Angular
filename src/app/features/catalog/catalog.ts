@@ -1,62 +1,65 @@
-import { Component } from '@angular/core';
+import { Component, Inject, OnInit, PLATFORM_ID, signal } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
+import { finalize } from 'rxjs';
 
 import { ProductCard } from '../../shared/components/product-card/product-card';
 import { Product } from '../../shared/interfaces/product-model';
+import { CatalogService } from '../../shared/services/catalog-service';
 
 @Component({
   selector: 'app-catalog',
   standalone: true,
-  imports: [
-    ProductCard,
-  ],
+  imports: [ProductCard],
   templateUrl: './catalog.html',
   styleUrl: './catalog.css',
 })
-export class Catalog {
+export class Catalog implements OnInit {
 
-  // depois muda pra requisição da api
-  products: Product[] = [
-    {
-      productId: '1',
-      productName: 'Camiseta Básica Verde',
-      category: 'Camisetas',
-      price: 25,
-      size: 'M',
-      imageUrl: 'assets/images/camiseta-verde.jpg',
-      status: 'AVAILABLE',
-    },
-    {
-      productId: '2',
-      productName: 'Calça Jeans',
-      category: 'Calças',
-      price: 60,
-      size: '40',
-      imageUrl: 'assets/images/calca-jeans.jpg',
-      status: 'AVAILABLE',
-    },
-    {
-      productId: '3',
-      productName: 'Vestido Floral',
-      category: 'Vestidos',
-      price: 45,
-      size: 'P',
-      imageUrl: 'assets/images/vestido-floral.jpg',
-      status: 'RESERVED',
-    },
-    {
-      productId: '4',
-      productName: 'Moletom Cinza',
-      category: 'Moletons',
-      price: 50,
-      size: 'G',
-      imageUrl: 'assets/images/moletom-cinza.jpg',
-      status: 'SOLD',
-    },
-  ];
+  // 1. Convertido para Signals
+  products = signal<Product[]>([]);
+  isLoading = signal<boolean>(false);
+  errorMessage = signal<string>('');
+
+  constructor(
+    private readonly catalogService: CatalogService,
+    @Inject(PLATFORM_ID) private readonly platformId: Object
+  ) {}
+
+  ngOnInit(): void {
+    if (isPlatformBrowser(this.platformId)) {
+      this.loadProducts();
+    }
+  }
+
+  loadProducts(): void {
+    this.isLoading.set(true);
+    this.errorMessage.set('');
+
+    this.catalogService
+      .listProducts()
+      .pipe(
+        finalize(() => {
+          this.isLoading.set(false); // O Angular será notificado na hora!
+        })
+      )
+      .subscribe({
+        next: (data: Product[]) => {
+          console.log('✅ Produtos chegaram do backend:', data);
+          this.products.set(data);
+        },
+        error: (error) => {
+          console.error('❌ Error when trying to fetch products: ', error);
+
+          if (error.status === 401 || error.status === 403) {
+            this.errorMessage.set('Você precisa estar autenticado para acessar o catálogo.');
+          } else {
+            this.errorMessage.set('Não foi possível carregar os produtos.');
+          }
+        }
+      });
+  }
 
   onAddToCart(product: Product): void {
     console.log('Produto adicionado ao carrinho:', product);
-
-    // this.cartService.addProduct(product);
   }
 }
