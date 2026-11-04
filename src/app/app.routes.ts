@@ -1,9 +1,9 @@
 import { Routes } from '@angular/router';
 
 export const routes: Routes = [
+  // rotas de tela cheia (sem sidebar)
   { 
     path: '', 
-    // Lazy Loading: o código da Landing Page só é descarregado se o utilizador aceder a esta rota
     loadComponent: () => import('./features/landing-page/landing-page').then(c => c.LandingPage),
     title: 'Renova Bazar | A moda que faz o bem'
   },
@@ -17,12 +17,24 @@ export const routes: Routes = [
     loadComponent: () => import('./features/sign-up/sign-up').then(c => c.SignUp),
     title: 'Faça parte do Renova'
   },
+
+  // rotas Internas da Aplicação (sem sidebar fixa)
   {
-    path: 'catalog',
-    loadComponent: () => import('./features/catalog/catalog').then(c => c.Catalog),
-    title: 'Produtos',
-    
+    path: '',
+    loadComponent: () => import('./layout/main-layout/main-layout').then(m => m.MainLayout),
+    children: [
+      {
+        path: 'catalog',
+        loadComponent: () => import('./features/catalog/catalog').then(c => c.Catalog),
+        title: 'Produtos | Renova Bazar'
+      },
+
+      // À medida que for criando as novas telas, basta adicionar as rotas filhas aqui:
+      // { path: 'my-orders', loadComponent: ... },
+      // { path: 'profile', loadComponent: ... },
+    ]
   },
+
   {
     path: '**',
     redirectTo: '',

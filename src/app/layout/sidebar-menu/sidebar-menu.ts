@@ -2,11 +2,8 @@ import { Component, signal } from '@angular/core';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { UserRole } from '../../shared/interfaces/user-role';
 
-
-
-
 @Component({
-  imports: [Router, RouterLink, RouterLinkActive],
+  imports: [RouterLink, RouterLinkActive],
   selector: 'app-sidebar-menu',
   styleUrl: './sidebar-menu.css',
   templateUrl: './sidebar-menu.html',
