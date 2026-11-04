@@ -1,80 +1,36 @@
-<div class="flex flex-col h-full p-6 justify-between bg-renova-bg-primario">
+<aside class="fixed bottom-0 left-0 top-0 z-30 flex min-h-screen w-64 flex-col justify-between border-r border-slate-200 bg-white p-6">
   
-  <nav class="flex flex-col gap-1.5 text-sm font-medium text-gray-700">
-    <a routerLink="/catalog" 
-       routerLinkActive="bg-renova-primaria text-white shadow-md font-semibold"
-       class="flex items-center gap-3 px-4 py-3 rounded-xl transition-all bg-renova-primaria hover:bg-gray-100">
-      <i class="fa-solid fa-box-archive text-base w-5 text-center"></i>
-      <span>Área de produtos</span>
-    </a>
-
-    <a routerLink="/my-orders" 
-       routerLinkActive="bg-renova-primaria text-white shadow-md font-semibold"
-       class="flex items-center gap-3 px-4 py-3 rounded-xl transition-all hover:bg-gray-100">
-      <i class="fa-solid fa-cart-shopping text-base w-5 text-center"></i>
-      <span>Meus pedidos</span>
-    </a>
-
-    <a routerLink="/new-order" 
-       routerLinkActive="bg-renova-primaria text-white shadow-md font-semibold"
-       class="flex items-center gap-3 px-4 py-3 rounded-xl transition-all hover:bg-gray-100">
-      <i class="fa-solid fa-circle-plus text-base w-5 text-center"></i>
-      <span>Realizar novo pedido</span>
-    </a>
-
-    @if (userRole() === 'EMPLOYEE') {
-      <div class="my-2 border-t border-gray-100"></div>
-
-      <a routerLink="/manage-orders" 
-         routerLinkActive="bg-renova-primaria text-white shadow-md font-semibold"
-         class="flex items-center gap-3 px-4 py-3 rounded-xl transition-all hover:bg-gray-100">
-        <i class="fa-regular fa-rectangle-list text-base w-5 text-center"></i>
-        <span>Visualizar pedidos</span>
-      </a>
-
-      <a routerLink="/register-product" 
-         routerLinkActive="bg-renova-primaria text-white shadow-md font-semibold"
-         class="flex items-center gap-3 px-4 py-3 rounded-xl transition-all hover:bg-gray-100">
-        <i class="fa-solid fa-box text-base w-5 text-center"></i>
-        <span>Cadastrar produto</span>
-      </a>
-
-      <a routerLink="/register-employee" 
-         routerLinkActive="bg-renova-primaria text-white shadow-md font-semibold"
-         class="flex items-center gap-3 px-4 py-3 rounded-xl transition-all hover:bg-gray-100">
-        <i class="fa-solid fa-user-plus text-base w-5 text-center"></i>
-        <span>Cadastrar funcionário</span>
-      </a>
-    }
-
-    <div class="my-2 border-t border-gray-100"></div>
-
-    <a routerLink="/profile" 
-       routerLinkActive="bg-renova-primaria text-white shadow-md font-semibold"
-       class="flex items-center gap-3 px-4 py-3 rounded-xl transition-all hover:bg-gray-100">
-      <i class="fa-regular fa-user text-base w-5 text-center"></i>
-      <span>Minha conta</span>
-    </a>
-
-    <a routerLink="/help" 
-       routerLinkActive="bg-renova-primaria text-white shadow-md font-semibold"
-       class="flex items-center gap-3 px-4 py-3 rounded-xl transition-all hover:bg-gray-100">
-      <i class="fa-regular fa-circle-question text-base w-5 text-center"></i>
-      <span>Ajuda</span>
-    </a>
-
-    <button (click)="logout()" 
-            class="flex items-center gap-3 px-4 py-3 rounded-xl transition-all text-red-600 hover:bg-red-50 text-left mt-2">
-      <i class="fa-solid fa-right-from-bracket text-base w-5 text-center"></i>
-      <span class="font-semibold">Sair / Logout</span>
-    </button>
-  </nav>
-
-  <div class="pt-6 border-t border-gray-100 text-xs text-gray-500">
-    <div class="flex items-center gap-2 mb-2 text-renova-primaria">
-      <i class="fa-solid fa-leaf text-base"></i>
-    </div>
-    <p class="italic">"Cada um contribua segundo propôs no seu coração."</p>
+  <div class="flex flex-col gap-6">
+    <nav class="mt-2 flex flex-col gap-1.5">
+      @for (item of menuItems; track item.label) {
+        @if (hasPermission(item)) {
+          <a
+            [routerLink]="item.route"
+            routerLinkActive="bg-renova-primaria text-white shadow-sm font-semibold"
+            [routerLinkActiveOptions]="{ exact: true }"
+            class="flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium text-slate-600 transition-colors hover:bg-slate-100 cursor-pointer"
+          >
+            <i [class]="item.icon + ' text-base w-5 text-center'"></i>
+            <span>{{ item.label }}</span>
+          </a>
+        }
+      }
+    </nav>
   </div>
 
-</div>
+  <div class="flex flex-col gap-6 border-t border-slate-100 pt-4">
+    <button
+      type="button"
+      (click)="logout()"
+      class="flex w-full items-center gap-3 rounded-xl px-4 py-2 text-left text-sm font-semibold text-red-600 transition-colors hover:bg-red-50 cursor-pointer"
+    >
+      <i class="fa-solid fa-arrow-right-from-bracket text-base w-5 text-center"></i>
+      <span>Sair / Logout</span>
+    </button>
+
+    <div class="text-[11px] leading-relaxed text-slate-400">
+      <p class="italic">"Cada um contribua segundo propôs no seu coração."</p>
+    </div>
+  </div>
+
+</aside>

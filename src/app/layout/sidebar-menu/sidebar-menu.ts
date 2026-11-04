@@ -1,7 +1,7 @@
 import { Component, OnInit, signal } from '@angular/core';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
+import { AuthService } from '../../shared/services/auth-service'; // Ajuste o caminho se necessário
 import { UserRole } from '../../shared/interfaces/user-role';
-import { AuthService } from '../../shared/services/auth-service';
 
 export interface MenuItem {
   label: string;
@@ -11,7 +11,7 @@ export interface MenuItem {
 }
 
 @Component({
-  imports: [RouterLink, RouterLinkActive, AuthService],
+  imports: [RouterLink, RouterLinkActive],
   selector: 'app-sidebar-menu',
   styleUrl: './sidebar-menu.css',
   templateUrl: './sidebar-menu.html',
@@ -50,7 +50,7 @@ export class SidebarMenu implements OnInit{
     },
     {
       label: 'Cadastrar funcionário',
-      icon: 'fa-regular fa-user-gear',
+      icon: 'fa-solid fa-users',
       route: '/admin/new-employee',
       roles: [UserRole.EMPLOYEE]
     },
