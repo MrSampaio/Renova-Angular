@@ -15,7 +15,6 @@ import { CatalogService } from '../../shared/services/catalog-service';
 })
 export class Catalog implements OnInit {
 
-  // 1. Convertido para Signals
   products = signal<Product[]>([]);
   isLoading = signal<boolean>(false);
   errorMessage = signal<string>('');
@@ -39,7 +38,7 @@ export class Catalog implements OnInit {
       .listProducts()
       .pipe(
         finalize(() => {
-          this.isLoading.set(false); // O Angular será notificado na hora!
+          this.isLoading.set(false);
         })
       )
       .subscribe({
