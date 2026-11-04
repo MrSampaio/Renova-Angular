@@ -27,11 +27,12 @@ export class AuthService {
     }
 
     // o tap faz com que o dado que é lido possa ser armazenado na variável antes de ser modificado
+
     fetchUser(): Observable<UserProfile> {
-        return this.http.get<UserProfile>(`${this.apiUrl}/me`).pipe(
+        return this.http.get<UserProfile>(`${environment.apiUrl}/users/me`).pipe(
             tap((profile) => {
-            this.currentUser.set(profile); 
-        })
-    );
+            this.currentUser.set(profile);
+            })
+        );
     }
 }
