@@ -44,12 +44,9 @@ export class Catalog implements OnInit {
       )
       .subscribe({
         next: (data: Product[]) => {
-          console.log('✅ Produtos chegaram do backend:', data);
           this.products.set(data);
         },
         error: (error) => {
-          console.error('❌ Error when trying to fetch products: ', error);
-
           if (error.status === 401 || error.status === 403) {
             this.errorMessage.set('Você precisa estar autenticado para acessar o catálogo.');
           } else {
