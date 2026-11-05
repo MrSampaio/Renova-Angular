@@ -1,0 +1,178 @@
+<div class="relative w-full max-w-5xl mx-auto flex flex-col justify-center min-h-[calc(100vh-theme(spacing.24))]">
+  <header class="mb-8 pt-2">
+    <h1 class="mt-4 text-3xl font-bold text-slate-900">
+      Adicionar nova roupa
+    </h1>
+
+    <p class="mt-2 text-sm text-slate-500">
+      Preencha as informações abaixo para cadastrar um novo item no bazar.
+    </p>
+  </header>
+
+  <!-- formulário -->
+  <form (ngSubmit)="onSubmit()" class="rounded-2xl border border-slate-100 bg-white p-6 shadow-[0_2px_10px_-4px_rgba(0,0,0,0.05)] sm:p-8">
+    
+    <!-- fotos do Produto -->
+    <div class="mb-8 border-b border-slate-100 pb-8">
+      <label class="mb-4 block text-sm font-bold text-slate-800">
+        Fotos do produto
+      </label>
+
+      <div class="grid grid-cols-2 gap-4 sm:grid-cols-5 md:grid-cols-6 lg:grid-cols-7">
+        <!--upload -->
+        <label class="col-span-2 flex cursor-pointer flex-col items-center justify-center rounded-xl border-2 border-dashed border-slate-200 bg-slate-50/50 p-6 text-center transition-colors hover:border-renova-primaria hover:bg-stone-50 sm:col-span-3">
+          <div class="mb-3 flex h-10 w-10 items-center justify-center rounded-lg border border-slate-200 bg-white shadow-sm">
+            <i class="fa-regular fa-image text-lg text-slate-700" aria-hidden="true"></i>
+          </div>
+          <p class="text-sm font-bold text-slate-700">Clique para adicionar fotos</p>
+          <p class="mt-1 text-xs text-slate-500">ou arraste os arquivos aqui</p>
+          <p class="mt-3 text-[10px] font-medium text-slate-400">JPG, PNG (máx. 5MB cada)</p>
+          <input type="file" multiple class="hidden" accept="image/png, image/jpeg, image/webp" />
+        </label>
+
+        @for (item of [1, 2, 3]; track item) {
+          <label class="col-span-1 flex aspect-square cursor-pointer flex-col items-center justify-center rounded-xl border-2 border-dashed border-slate-200 bg-white text-slate-400 transition-colors hover:border-slate-300 hover:bg-slate-50">
+            <i class="fa-solid fa-plus text-base" aria-hidden="true"></i>
+            <span class="mt-2 text-xs font-medium text-slate-500">Adicionar</span>
+            <input type="file" class="hidden" accept="image/png, image/jpeg, image/webp" />
+          </label>
+        }
+      </div>
+    </div>
+
+    <!-- nome e categoria -->
+    <div class="mb-6 grid grid-cols-1 gap-6 md:grid-cols-2">
+      <div>
+        <label for="name" class="mb-2 block text-sm font-bold text-slate-800">
+          Nome da roupa <span class="text-red-500">*</span>
+        </label>
+        <input id="name" type="text" [ngModel]="name()" (ngModelChange)="name.set($event)" name="name" placeholder="Ex: Camiseta Básica Verde" required
+          class="w-full rounded-xl border border-slate-200 px-4 py-3 text-sm text-slate-700 outline-none transition-all placeholder:text-slate-300 focus:border-renova-primaria focus:ring-1 focus:ring-renova-primaria" />
+      </div>
+
+      <div>
+        <label for="category" class="mb-2 block text-sm font-bold text-slate-800">
+          Categoria <span class="text-red-500">*</span>
+        </label>
+        <div class="relative">
+          <select id="category" [ngModel]="category()" (ngModelChange)="category.set($event)" name="category" required
+            class="w-full appearance-none rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-700 outline-none transition-all focus:border-renova-primaria focus:ring-1 focus:ring-renova-primaria"
+            [class.text-slate-400]="!category()">
+            <option value="" disabled selected>Selecione uma categoria</option>
+            @for (cat of categories; track cat.value) {
+              <option [value]="cat.value" class="text-slate-700">{{ cat.label }}</option>
+            }
+          </select>
+          <i class="fa-solid fa-chevron-down pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-xs text-slate-400"></i>
+        </div>
+      </div>
+    </div>
+
+    <!-- preço e estado -->
+    <div class="mb-8 grid grid-cols-1 gap-6 border-b border-slate-100 pb-8 md:grid-cols-2">
+      <div>
+        <label for="price" class="mb-2 block text-sm font-bold text-slate-800">
+          Preço (R$) <span class="text-red-500">*</span>
+        </label>
+        <div class="relative">
+          <span class="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-sm font-bold text-slate-700">R$</span>
+          <input id="price" type="text" [ngModel]="price()" (ngModelChange)="price.set($event)" name="price" placeholder="Ex: 45,00" required
+            class="w-full rounded-xl border border-slate-200 py-3 pl-12 pr-4 text-sm text-slate-700 outline-none transition-all placeholder:text-slate-300 focus:border-renova-primaria focus:ring-1 focus:ring-renova-primaria" />
+        </div>
+      </div>
+
+      <div>
+        <label for="condition" class="mb-2 block text-sm font-bold text-slate-800">
+          Estado da roupa <span class="text-red-500">*</span>
+        </label>
+        <div class="relative">
+          <select id="condition" [ngModel]="condition()" (ngModelChange)="condition.set($event)" name="condition" required
+            class="w-full appearance-none rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-700 outline-none transition-all focus:border-renova-primaria focus:ring-1 focus:ring-renova-primaria"
+            [class.text-slate-400]="!condition()">
+            <option value="" disabled selected>Selecione o estado</option>
+            @for (cond of conditions; track cond.value) {
+              <option [value]="cond.value" class="text-slate-700">{{ cond.label }}</option>
+            }
+          </select>
+          <i class="fa-solid fa-chevron-down pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-xs text-slate-400"></i>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tamanhos -->
+    <div class="mb-8 border-b border-slate-100 pb-8">
+      <label class="mb-4 block text-sm font-bold text-slate-800">
+        Tamanhos disponíveis <span class="text-red-500">*</span>
+      </label>
+
+      <!-- Opção 1: Tamanhos Padrão -->
+      <div class="mb-5">
+        <label class="inline-flex cursor-pointer items-center gap-3">
+          <div class="relative flex h-5 w-5 items-center justify-center">
+            <input type="radio" name="sizeType" value="standard" [ngModel]="sizeType()" (ngModelChange)="sizeType.set('standard')" 
+              class="peer h-5 w-5 cursor-pointer appearance-none rounded-full border border-slate-300 checked:border-renova-primaria" />
+            <div class="pointer-events-none absolute h-2.5 w-2.5 rounded-full bg-renova-primaria opacity-0 transition-opacity peer-checked:opacity-100"></div>
+          </div>
+          <span class="text-sm font-medium text-slate-700">Usar tamanhos padrão (P, M, G, GG)</span>
+        </label>
+
+        <!-- Botões de Tamanho -->
+        <div class="mt-3 flex flex-wrap gap-3 pl-8">
+          @for (size of standardSizes; track size) {
+            <label class="flex h-11 w-12 cursor-pointer select-none items-center justify-center rounded-xl border text-sm font-bold transition-all"
+              [class.bg-renova-primaria]="isStandardSizeSelected(size) && sizeType() === 'standard'"
+              [class.border-renova-primaria]="isStandardSizeSelected(size) && sizeType() === 'standard'"
+              [class.text-white]="isStandardSizeSelected(size) && sizeType() === 'standard'"
+              [class.bg-white]="!isStandardSizeSelected(size) || sizeType() !== 'standard'"
+              [class.border-slate-200]="!isStandardSizeSelected(size) || sizeType() !== 'standard'"
+              [class.text-slate-600]="!isStandardSizeSelected(size) || sizeType() !== 'standard'"
+              [class.opacity-50]="sizeType() !== 'standard'">
+              <input type="checkbox" class="hidden" [checked]="isStandardSizeSelected(size)" (change)="toggleStandardSize(size)" [disabled]="sizeType() !== 'standard'" />
+              {{ size }}
+            </label>
+          }
+        </div>
+      </div>
+
+      <!-- Opção 2: Numéricos -->
+      <div>
+        <label class="inline-flex cursor-pointer items-center gap-3">
+          <div class="relative flex h-5 w-5 items-center justify-center">
+            <input type="radio" name="sizeType" value="numeric" [ngModel]="sizeType()" (ngModelChange)="sizeType.set('numeric')" 
+              class="peer h-5 w-5 cursor-pointer appearance-none rounded-full border border-slate-300 checked:border-renova-primaria" />
+            <div class="pointer-events-none absolute h-2.5 w-2.5 rounded-full bg-renova-primaria opacity-0 transition-opacity peer-checked:opacity-100"></div>
+          </div>
+          <span class="text-sm font-medium text-slate-700">Usar tamanhos numéricos</span>
+        </label>
+        
+        <div class="mt-3 pl-8">
+          <input type="text" [ngModel]="numericSizesInput()" (ngModelChange)="numericSizesInput.set($event)" name="numericSizesInput"
+            [disabled]="sizeType() !== 'numeric'" placeholder="Ex: 36, 38, 40, 42 (separe por vírgula)"
+            class="w-full rounded-xl border border-slate-200 px-4 py-3 text-sm text-slate-700 outline-none transition-all placeholder:text-slate-300 focus:border-renova-primaria focus:ring-1 focus:ring-renova-primaria disabled:bg-slate-50 disabled:text-slate-400" />
+        </div>
+      </div>
+    </div>
+
+    <!-- Descrição -->
+    <div class="mb-8">
+      <label for="description" class="mb-2 block text-sm font-bold text-slate-800">
+        Descrição <span class="text-xs font-normal text-slate-400">(opcional)</span>
+      </label>
+      <textarea id="description" rows="3" [ngModel]="description()" (ngModelChange)="description.set($event)" name="description"
+        placeholder="Adicione mais detalhes sobre a roupa, como marca, material, estado de conservação, etc."
+        class="w-full resize-y rounded-xl border border-slate-200 p-4 text-sm text-slate-700 outline-none transition-all placeholder:text-slate-300 focus:border-renova-primaria focus:ring-1 focus:ring-renova-primaria"></textarea>
+    </div>
+
+    <!-- Ações -->
+    <div class="flex flex-col-reverse justify-end gap-3 sm:flex-row">
+      <button type="button" routerLink="/catalog" class="w-full rounded-xl border border-slate-200 bg-white px-8 py-3.5 text-sm font-bold text-slate-600 transition-colors hover:bg-slate-50 hover:text-slate-800 sm:w-auto cursor-pointer">
+        Cancelar
+      </button>
+
+      <button type="submit" class="flex w-full items-center justify-center gap-2 rounded-xl bg-renova-primaria px-8 py-3.5 text-sm font-bold text-white transition-colors hover:brightness-90 sm:w-auto cursor-pointer">
+        <i class="fa-regular fa-floppy-disk text-base" aria-hidden="true"></i>
+        <span>Cadastrar produto</span>
+      </button>
+    </div>
+  </form>
+</div>

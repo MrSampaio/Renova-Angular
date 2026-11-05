@@ -45,7 +45,7 @@ export class SidebarMenu implements OnInit{
     {
       label: 'Cadastrar produto',
       icon: 'fa-solid fa-box-archive',
-      route: '/admin/new-product',
+      route: '/new-product',
       roles: [UserRole.EMPLOYEE]
     },
     {

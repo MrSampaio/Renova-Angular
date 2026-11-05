@@ -28,6 +28,11 @@ export const routes: Routes = [
         loadComponent: () => import('./features/catalog/catalog').then(c => c.Catalog),
         title: 'Produtos | Renova Bazar'
       },
+      {
+        path: 'new-product',
+        loadComponent: () => import('./features/new-product/new-product').then(c => c.NewProduct),
+        title: 'Cadastrar Produto'
+      }
 
       // À medida que for criando as novas telas, basta adicionar as rotas filhas aqui:
       // { path: 'my-orders', loadComponent: ... },
