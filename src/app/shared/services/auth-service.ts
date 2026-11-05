@@ -1,9 +1,10 @@
-import { Injectable, signal } from '@angular/core';
+import { Injectable, signal, inject, PLATFORM_ID } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
+import { HttpClient } from '@angular/common/http';
+import { Observable, of, tap } from 'rxjs';
+import { environment } from '../../../environments/environment.development';
 import { AuthRequest } from '../interfaces/auth-request';
 import { LoginResponse } from '../../features/login/login-response';
-import { HttpClient } from '@angular/common/http';
-import { environment } from '../../../environments/environment.development';
-import { Observable, tap } from 'rxjs';
 import { signUpRequest } from '../../features/sign-up/sign-up-request';
 import { UserProfile } from '../interfaces/user-profile';
 
@@ -13,9 +14,10 @@ import { UserProfile } from '../interfaces/user-profile';
 
 export class AuthService {
     private apiUrl = `${environment.apiUrl}/auth`;
+    private http = inject(HttpClient);
+    private platformId = inject(PLATFORM_ID);
 
-    constructor(private http: HttpClient) {}
-
+    // constructor(private http: HttpClient) {}
     currentUser = signal<UserProfile | null>(null);
 
     login(data: AuthRequest): Observable<LoginResponse> {
@@ -27,8 +29,12 @@ export class AuthService {
     }
 
     // o tap faz com que o dado que é lido possa ser armazenado na variável antes de ser modificado
+    fetchUser(): Observable<UserProfile | null> {
 
-    fetchUser(): Observable<UserProfile> {
+        if (!isPlatformBrowser(this.platformId)) {
+            return of(null);
+        }
+
         return this.http.get<UserProfile>(
             `${environment.apiUrl}/users/me`, 
             { withCredentials: true }

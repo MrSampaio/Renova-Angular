@@ -1,25 +1,5 @@
-<div class="relative w-full max-w-5xl">
-  
-  <!-- Decoração Superior Direita (Moda que faz o bem) -->
-  <div class="absolute right-0 top-0 hidden md:block opacity-90 pointer-events-none">
-    <div class="relative flex h-24 items-center justify-end rounded-bl-3xl bg-[#f4f3ea] pl-16 pr-8">
-      <div class="text-right">
-        <p class="text-xl font-medium text-slate-800 leading-tight">Moda</p>
-        <p class="text-xl font-medium text-slate-800 leading-tight">que faz o bem</p>
-        <div class="mt-1 h-0.5 w-8 bg-amber-200 ml-auto"></div>
-      </div>
-      <!-- Folha decorativa -->
-      <i class="fa-solid fa-leaf absolute -bottom-4 -left-4 text-4xl text-[#c5d0ba] opacity-60"></i>
-    </div>
-  </div>
-
-  <!-- Cabeçalho -->
+<div class="relative w-full max-w-5xl mx-auto flex flex-col justify-center min-h-[calc(100vh-theme(spacing.24))]">
   <header class="mb-8 pt-2">
-    <a routerLink="/catalog" class="group inline-flex items-center gap-2 text-sm font-medium text-slate-500 transition-colors hover:text-slate-800">
-      <i class="fa-solid fa-arrow-left text-xs transition-transform group-hover:-translate-x-1" aria-hidden="true"></i>
-      <span>Voltar para produtos</span>
-    </a>
-
     <h1 class="mt-4 text-3xl font-bold text-slate-900">
       Adicionar nova roupa
     </h1>
@@ -29,17 +9,17 @@
     </p>
   </header>
 
-  <!-- Formulário -->
+  <!-- formulário -->
   <form (ngSubmit)="onSubmit()" class="rounded-2xl border border-slate-100 bg-white p-6 shadow-[0_2px_10px_-4px_rgba(0,0,0,0.05)] sm:p-8">
     
-    <!-- Fotos do Produto -->
+    <!-- fotos do Produto -->
     <div class="mb-8 border-b border-slate-100 pb-8">
       <label class="mb-4 block text-sm font-bold text-slate-800">
         Fotos do produto
       </label>
 
       <div class="grid grid-cols-2 gap-4 sm:grid-cols-5 md:grid-cols-6 lg:grid-cols-7">
-        <!-- Area Principal de Upload -->
+        <!--upload -->
         <label class="col-span-2 flex cursor-pointer flex-col items-center justify-center rounded-xl border-2 border-dashed border-slate-200 bg-slate-50/50 p-6 text-center transition-colors hover:border-renova-primaria hover:bg-stone-50 sm:col-span-3">
           <div class="mb-3 flex h-10 w-10 items-center justify-center rounded-lg border border-slate-200 bg-white shadow-sm">
             <i class="fa-regular fa-image text-lg text-slate-700" aria-hidden="true"></i>
@@ -47,21 +27,20 @@
           <p class="text-sm font-bold text-slate-700">Clique para adicionar fotos</p>
           <p class="mt-1 text-xs text-slate-500">ou arraste os arquivos aqui</p>
           <p class="mt-3 text-[10px] font-medium text-slate-400">JPG, PNG (máx. 5MB cada)</p>
-          <input type="file" multiple class="hidden" accept="image/png, image/jpeg" />
+          <input type="file" multiple class="hidden" accept="image/png, image/jpeg, image/webp" />
         </label>
 
-        <!-- Thumbnails Adicionais -->
         @for (item of [1, 2, 3]; track item) {
           <label class="col-span-1 flex aspect-square cursor-pointer flex-col items-center justify-center rounded-xl border-2 border-dashed border-slate-200 bg-white text-slate-400 transition-colors hover:border-slate-300 hover:bg-slate-50">
             <i class="fa-solid fa-plus text-base" aria-hidden="true"></i>
             <span class="mt-2 text-xs font-medium text-slate-500">Adicionar</span>
-            <input type="file" class="hidden" accept="image/png, image/jpeg" />
+            <input type="file" class="hidden" accept="image/png, image/jpeg, image/webp" />
           </label>
         }
       </div>
     </div>
 
-    <!-- Linha 1: Nome e Categoria -->
+    <!-- nome e categoria -->
     <div class="mb-6 grid grid-cols-1 gap-6 md:grid-cols-2">
       <div>
         <label for="name" class="mb-2 block text-sm font-bold text-slate-800">
@@ -89,7 +68,7 @@
       </div>
     </div>
 
-    <!-- Linha 2: Preço e Estado -->
+    <!-- preço e estado -->
     <div class="mb-8 grid grid-cols-1 gap-6 border-b border-slate-100 pb-8 md:grid-cols-2">
       <div>
         <label for="price" class="mb-2 block text-sm font-bold text-slate-800">
@@ -197,4 +176,3 @@
     </div>
   </form>
 </div>
-```[cite: 3]

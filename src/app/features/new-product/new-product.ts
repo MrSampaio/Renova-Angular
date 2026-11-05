@@ -24,10 +24,14 @@ export class NewProduct {
   categories = [
     { value: 'CAMISETAS', label: 'Camisetas' },
     { value: 'CALCAS', label: 'Calças' },
+    { value: 'SHORTS', label: 'Shorts' },
     { value: 'VESTIDOS', label: 'Vestidos' },
     { value: 'MOLETONS', label: 'Moletons' },
     { value: 'CAMISAS', label: 'Camisas' },
     { value: 'SAIAS', label: 'Saias' },
+    { value: 'MEIAS', label: 'Meias' },
+    { value: 'LUVAS', label: 'Luvas' },
+    { value: 'ACESSORIOS', label: 'Acessorios' },
     { value: 'OUTROS', label: 'Outros' }
   ];
 
@@ -64,8 +68,6 @@ export class NewProduct {
       sizes: this.sizeType() === 'standard' ? this.selectedStandardSizes() : this.numericSizesInput().split(',').map(s => s.trim()),
       description: this.description()
     };
-    
-    console.log('Produto a ser salvo:', productPayload);
     // Aqui entrará o this.productService.createProduct(...)
   }
 }
