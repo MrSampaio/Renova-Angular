@@ -91,11 +91,6 @@ export class NewProduct {
 
   }
 
-
-  
-
-
-
   // muda isso pra uma interface
   categories = [
     { value: 'CAMISETAS', label: 'Camisetas' },

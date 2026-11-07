@@ -8,7 +8,7 @@ import { HttpClient } from '@angular/common/http';
     providedIn: 'root'  
 })
 
-export class CatalogService {
+export class ProductService {
 
     private apiUrl = `${environment.apiUrl}/products`;
 
@@ -17,6 +17,12 @@ export class CatalogService {
     listProducts(): Observable<Product[]> {
         return this.http.get<Product[]>(this.apiUrl);
     }
+
+    // register(data: signUpRequest): Observable<void> {
+    //     return this.http.post<void>(`${this.apiUrl}/register-costumer`, data);
+    // }
+
+    createProduct():
 
 }
 

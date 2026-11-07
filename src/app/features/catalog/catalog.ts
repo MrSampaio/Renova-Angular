@@ -3,7 +3,7 @@ import { isPlatformBrowser } from '@angular/common';
 import { finalize } from 'rxjs';
 import { ProductCard } from '../../shared/components/product-card/product-card';
 import { Product } from '../../shared/interfaces/product-model';
-import { CatalogService } from '../../shared/services/catalog-service';
+import { ProductService } from '../../shared/services/product-service';
 
 @Component({
   selector: 'app-catalog',
@@ -19,7 +19,7 @@ export class Catalog implements OnInit {
   errorMessage = signal<string>('');
 
   constructor(
-    private readonly catalogService: CatalogService,
+    private readonly catalogService: ProductService,
     @Inject(PLATFORM_ID) private readonly platformId: Object
   ) {}
 
