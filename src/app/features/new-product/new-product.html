@@ -14,30 +14,40 @@
     
     <!-- fotos do Produto -->
     <div class="mb-8 border-b border-slate-100 pb-8">
-      <label class="mb-4 block text-sm font-bold text-slate-800">
+      <label class="mb-4 block text-sm font-bold text-slate-800 text-center sm:text-left">
         Fotos do produto
       </label>
 
-      <div class="grid grid-cols-2 gap-4 sm:grid-cols-5 md:grid-cols-6 lg:grid-cols-7">
-        <!--upload -->
-        <label class="col-span-2 flex cursor-pointer flex-col items-center justify-center rounded-xl border-2 border-dashed border-slate-200 bg-slate-50/50 p-6 text-center transition-colors hover:border-renova-primaria hover:bg-stone-50 sm:col-span-3">
-          <div class="mb-3 flex h-10 w-10 items-center justify-center rounded-lg border border-slate-200 bg-white shadow-sm">
-            <i class="fa-regular fa-image text-lg text-slate-700" aria-hidden="true"></i>
+      <!-- Container Centralizado para o Input de Upload -->
+      <div class="mx-auto mb-6 max-w-lg">
+        <label class="flex cursor-pointer flex-col items-center justify-center rounded-xl border-2 border-dashed border-slate-200 bg-slate-50/50 p-8 text-center transition-colors hover:border-renova-primaria hover:bg-stone-50">
+          <div class="mb-3 flex h-12 w-12 items-center justify-center rounded-lg border border-slate-200 bg-white shadow-sm">
+            <i class="fa-regular fa-image text-xl text-slate-700" aria-hidden="true"></i>
           </div>
-          <p class="text-sm font-bold text-slate-700">Clique para adicionar fotos</p>
-          <p class="mt-1 text-xs text-slate-500">ou arraste os arquivos aqui</p>
-          <p class="mt-3 text-[10px] font-medium text-slate-400">JPG, PNG (máx. 5MB cada)</p>
-          <input type="file" multiple class="hidden" accept="image/png, image/jpeg, image/webp" />
+          <p class="text-base font-bold text-slate-700">Clique para adicionar fotos</p>
+          <p class="mt-1 text-sm text-slate-500">ou arraste os arquivos aqui</p>
+          <p class="mt-4 text-xs font-medium text-slate-400">Formatos suportados: JPG, PNG, WEBP (máx. 5MB cada)</p>
+          <input (change)="onImageSelected($event)" type="file" multiple class="hidden" accept="image/png, image/jpeg, image/webp" />
         </label>
-
-        @for (item of [1, 2, 3]; track item) {
-          <label class="col-span-1 flex aspect-square cursor-pointer flex-col items-center justify-center rounded-xl border-2 border-dashed border-slate-200 bg-white text-slate-400 transition-colors hover:border-slate-300 hover:bg-slate-50">
-            <i class="fa-solid fa-plus text-base" aria-hidden="true"></i>
-            <span class="mt-2 text-xs font-medium text-slate-500">Adicionar</span>
-            <input type="file" class="hidden" accept="image/png, image/jpeg, image/webp" />
-          </label>
-        }
       </div>
+
+      <!-- Grelha de Previews (Abaixo do Input) -->
+      @if (imagePreviews().length > 0) {
+        <div class="grid grid-cols-2 gap-4 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6">
+          @for (preview of imagePreviews(); track $index) {
+            <div class="relative flex aspect-square flex-col items-center justify-center rounded-xl border border-slate-200 bg-slate-50">
+              <!-- A Imagem -->
+              <img [src]="preview" alt="Preview da roupa" class="h-full w-full rounded-xl object-cover shadow-sm" />
+              
+              <!-- Botão de remover (X) -->
+              <button type="button" (click)="removeImage($index)" 
+                class="absolute -right-2 -top-2 flex h-6 w-6 cursor-pointer items-center justify-center rounded-full bg-red-500 text-white shadow-md transition-transform hover:scale-110">
+                <i class="fa-solid fa-xmark text-xs" aria-hidden="true"></i>
+              </button>
+            </div>
+          }
+        </div>
+      }
     </div>
 
     <!-- nome e categoria -->
@@ -119,17 +129,17 @@
         <!-- Botões de Tamanho -->
         <div class="mt-3 flex flex-wrap gap-3 pl-8">
           @for (size of standardSizes; track size) {
-            <label class="flex h-11 w-12 cursor-pointer select-none items-center justify-center rounded-xl border text-sm font-bold transition-all"
-              [class.bg-renova-primaria]="isStandardSizeSelected(size) && sizeType() === 'standard'"
-              [class.border-renova-primaria]="isStandardSizeSelected(size) && sizeType() === 'standard'"
-              [class.text-white]="isStandardSizeSelected(size) && sizeType() === 'standard'"
-              [class.bg-white]="!isStandardSizeSelected(size) || sizeType() !== 'standard'"
-              [class.border-slate-200]="!isStandardSizeSelected(size) || sizeType() !== 'standard'"
-              [class.text-slate-600]="!isStandardSizeSelected(size) || sizeType() !== 'standard'"
+            <button type="button" (click)="selectSize(size)" [disabled]="sizeType() !== 'standard'"
+              class="flex h-11 w-12 cursor-pointer select-none items-center justify-center rounded-xl border text-sm font-bold transition-all"
+              [class.bg-renova-primaria]="selectedSize() === size && sizeType() === 'standard'"
+              [class.border-renova-primaria]="selectedSize() === size && sizeType() === 'standard'"
+              [class.text-white]="selectedSize() === size && sizeType() === 'standard'"
+              [class.bg-white]="selectedSize() !== size || sizeType() !== 'standard'"
+              [class.border-slate-200]="selectedSize() !== size || sizeType() !== 'standard'"
+              [class.text-slate-600]="selectedSize() !== size || sizeType() !== 'standard'"
               [class.opacity-50]="sizeType() !== 'standard'">
-              <input type="checkbox" class="hidden" [checked]="isStandardSizeSelected(size)" (change)="toggleStandardSize(size)" [disabled]="sizeType() !== 'standard'" />
               {{ size }}
-            </label>
+            </button>
           }
         </div>
       </div>

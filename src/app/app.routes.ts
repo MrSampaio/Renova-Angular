@@ -18,7 +18,7 @@ export const routes: Routes = [
     title: 'Faça parte do Renova'
   },
 
-  // rotas Internas da Aplicação (sem sidebar fixa)
+  // rotas Internas da Aplicação
   {
     path: '',
     loadComponent: () => import('./layout/main-layout/main-layout').then(m => m.MainLayout),
