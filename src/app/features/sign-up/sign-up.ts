@@ -1,11 +1,11 @@
 import { Component, signal } from '@angular/core';
 import { signUpRequest } from './sign-up-request';
-import { UserRole } from '../../shared/interfaces/user-role';
+import { UserRole } from '../../shared/models/user-role';
 import { Button } from '../../shared/components/button/button';
 import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { AuthService } from '../../shared/services/auth-service';
+import { AuthService } from '../../shared/services/auth.service';
 
 @Component({
   imports: [Button, FormsModule, CommonModule],

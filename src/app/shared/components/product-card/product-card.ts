@@ -6,20 +6,17 @@ import {
   Output,
 } from '@angular/core';
 
-import {
-  CurrencyPipe,
-  NgOptimizedImage,
-} from '@angular/common';
+import { CurrencyPipe } from '@angular/common';
 
 import { Button } from '../button/button';
-import { Product } from '../../interfaces/product-model';
+import { Product } from '../../models/product.model';
+import { environment } from '../../../../environments/environment.development';
 
 @Component({
   selector: 'app-product-card',
   standalone: true,
   imports: [
     CurrencyPipe,
-    NgOptimizedImage,
     Button,
   ],
   templateUrl: './product-card.html',
@@ -30,6 +27,8 @@ export class ProductCard {
   @Input({ required: true }) product!: Product;
 
   @Output() addToCart = new EventEmitter<Product>();
+
+  private apiUrl = `${environment.apiUrl}`;
 
   imageHasError = false;
 
@@ -77,5 +76,20 @@ export class ProductCard {
 
   onImageError(): void {
     this.imageHasError = true;
+  }
+
+  getImageUrl(): string {
+    if (!this.product.imageUrls || this.product.imageUrls.length === 0) {
+      return 'assets/placeholder.jpg';
+    }
+
+    const url = this.product.imageUrls[0];
+    
+    if (url.startsWith('http')) {
+      return url;
+    }
+
+    const baseUrl = `${this.apiUrl}`;
+    return url.startsWith('/') ? `${baseUrl}${url}` : `${baseUrl}/${url}`;
   }
 }

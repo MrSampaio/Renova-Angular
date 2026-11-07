@@ -1,7 +1,7 @@
 import { Component, OnInit, signal } from '@angular/core';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
-import { AuthService } from '../../shared/services/auth-service'; // Ajuste o caminho se necessário
-import { UserRole } from '../../shared/interfaces/user-role';
+import { AuthService } from '../../shared/services/auth.service'; // Ajuste o caminho se necessário
+import { UserRole } from '../../shared/models/user-role';
 
 export interface MenuItem {
   label: string;
