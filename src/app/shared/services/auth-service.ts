@@ -4,7 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, of, tap } from 'rxjs';
 import { environment } from '../../../environments/environment.development';
 import { AuthRequest } from '../interfaces/auth-request';
-import { LoginResponse } from '../../features/login/login-response';
+import { LoginResponse } from '../interfaces/login-response';
 import { signUpRequest } from '../../features/sign-up/sign-up-request';
 import { UserProfile } from '../interfaces/user-profile';
 

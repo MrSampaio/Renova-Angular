@@ -2,6 +2,8 @@ import { Component, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
+import { ProductService } from '../../shared/services/product-service';
+import { ProductCondition } from '../../shared/interfaces/product-model';
 
 @Component({
   selector: 'app-new-product',
@@ -11,7 +13,7 @@ import { Router, RouterLink } from '@angular/router';
 })
 export class NewProduct {
 
-  constructor(private router: Router) {}
+  constructor(private router: Router, private productService: ProductService) {}
 
   selectedFiles = signal<File[]>([]);
   imagePreviews = signal<string[]>([]);
@@ -60,15 +62,6 @@ export class NewProduct {
   }
 
   onSubmit(): void {
-    // const productPayload = {
-    //   name: this.name(),
-    //   category: this.category(),
-    //   price: parseFloat(this.price().replace(',', '.')),
-    //   condition: this.condition(),
-    //   sizeType: this.sizeType(),
-    //   sizes: this.sizeType() === 'standard' ? this.selectedStandardSizes() : this.numericSizesInput().split(',').map(s => s.trim()),
-    //   description: this.description()
-    // };
 
     const formData = new FormData()
 
@@ -87,11 +80,16 @@ export class NewProduct {
       formData.append('images', file); // lembra que aqui tem que ser o mesmo nome do parametro da api
     });
 
-
+    try {
+      this.productService.createProduct(formData);
+    } catch (error) {
+      console.log(error)
+    }
 
   }
 
   // muda isso pra uma interface
+
   categories = [
     { value: 'CAMISETAS', label: 'Camisetas' },
     { value: 'CALCAS', label: 'Calças' },
