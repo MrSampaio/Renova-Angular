@@ -10,7 +10,7 @@ import { HttpClient } from '@angular/common/http';
 
 export class CatalogService {
 
-    private apiUrl = `${environment.apiUrl}/catalog`;
+    private apiUrl = `${environment.apiUrl}/products`;
 
     constructor(private http: HttpClient) {}
 
