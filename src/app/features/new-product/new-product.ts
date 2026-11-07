@@ -2,6 +2,11 @@ import { Component, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
+import { ProductService } from '../../shared/services/product-service';
+import { ProductCondition } from '../../shared/interfaces/product-model';
+import { CATEGORY_OPTIONS } from '../../shared/interfaces/product-categories';
+import { CONDITION_OPTIONS } from '../../shared/interfaces/product-conditions';
+import { STANDARD_SIZE_OPTIONS } from '../../shared/interfaces/product-sizes';
 
 @Component({
   selector: 'app-new-product',
@@ -11,7 +16,15 @@ import { Router, RouterLink } from '@angular/router';
 })
 export class NewProduct {
 
-  constructor(private router: Router) {}
+  constructor(private router: Router, private productService: ProductService) {}
+
+  categories = CATEGORY_OPTIONS;
+  conditions = CONDITION_OPTIONS;
+  standardSizes = STANDARD_SIZE_OPTIONS;
+
+  selectSize(size: string): void {
+    this.selectedSize.set(size);
+  }
 
   selectedFiles = signal<File[]>([]);
   imagePreviews = signal<string[]>([]);
@@ -24,10 +37,6 @@ export class NewProduct {
 
   sizeType = signal<'standard' | 'numeric'>('standard');
   selectedSize = signal<string>('');
-  
-  selectSize(size: string): void {
-    this.selectedSize.set(size);
-  }
 
   numericSizesInput = signal<string>('');
 
@@ -60,15 +69,6 @@ export class NewProduct {
   }
 
   onSubmit(): void {
-    // const productPayload = {
-    //   name: this.name(),
-    //   category: this.category(),
-    //   price: parseFloat(this.price().replace(',', '.')),
-    //   condition: this.condition(),
-    //   sizeType: this.sizeType(),
-    //   sizes: this.sizeType() === 'standard' ? this.selectedStandardSizes() : this.numericSizesInput().split(',').map(s => s.trim()),
-    //   description: this.description()
-    // };
 
     const formData = new FormData()
 
@@ -87,36 +87,15 @@ export class NewProduct {
       formData.append('images', file); // lembra que aqui tem que ser o mesmo nome do parametro da api
     });
 
-
-
+    this.productService.createProduct(formData).subscribe({
+      next: (response) => {
+        console.log('Produto criado com sucesso', response);
+        this.router.navigate(['/catalog']);
+      },
+      error: (err) => {
+        console.error('Erro ao criar produto:', err);
+      }
+    });
   }
-
-
-  
-
-
-
-  // muda isso pra uma interface
-  categories = [
-    { value: 'CAMISETAS', label: 'Camisetas' },
-    { value: 'CALCAS', label: 'Calças' },
-    { value: 'SHORTS', label: 'Shorts' },
-    { value: 'VESTIDOS', label: 'Vestidos' },
-    { value: 'MOLETONS', label: 'Moletons' },
-    { value: 'CAMISAS', label: 'Camisas' },
-    { value: 'SAIAS', label: 'Saias' },
-    { value: 'MEIAS', label: 'Meias' },
-    { value: 'LUVAS', label: 'Luvas' },
-    { value: 'ACESSORIOS', label: 'Acessorios' },
-    { value: 'OUTROS', label: 'Outros' }
-  ];
-
-  conditions = [
-    { value: 'NOVO', label: 'Novo (com etiqueta)' },
-    { value: 'SEMI_NOVO', label: 'Semi-novo (excelente estado)' },
-    { value: 'USADO', label: 'Usado (bom estado)' }
-  ];
-
-  standardSizes = ['P', 'M', 'G', 'GG'];
 
 }

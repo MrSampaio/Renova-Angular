@@ -123,25 +123,27 @@
               class="peer h-5 w-5 cursor-pointer appearance-none rounded-full border border-slate-300 checked:border-renova-primaria" />
             <div class="pointer-events-none absolute h-2.5 w-2.5 rounded-full bg-renova-primaria opacity-0 transition-opacity peer-checked:opacity-100"></div>
           </div>
-          <span class="text-sm font-medium text-slate-700">Usar tamanhos padrão (P, M, G, GG)</span>
+          <span class="text-sm font-medium text-slate-700">Usar tamanhos padrão</span>
         </label>
 
         <!-- Botões de Tamanho -->
         <div class="mt-3 flex flex-wrap gap-3 pl-8">
-          @for (size of standardSizes; track size) {
-            <button type="button" (click)="selectSize(size)" [disabled]="sizeType() !== 'standard'"
+          @for (size of standardSizes; track size.value) {
+            <button type="button" (click)="selectSize(size.value)" [disabled]="sizeType() !== 'standard'"
               class="flex h-11 w-12 cursor-pointer select-none items-center justify-center rounded-xl border text-sm font-bold transition-all"
-              [class.bg-renova-primaria]="selectedSize() === size && sizeType() === 'standard'"
-              [class.border-renova-primaria]="selectedSize() === size && sizeType() === 'standard'"
-              [class.text-white]="selectedSize() === size && sizeType() === 'standard'"
-              [class.bg-white]="selectedSize() !== size || sizeType() !== 'standard'"
-              [class.border-slate-200]="selectedSize() !== size || sizeType() !== 'standard'"
-              [class.text-slate-600]="selectedSize() !== size || sizeType() !== 'standard'"
+              [class.bg-renova-primaria]="selectedSize() === size.value && sizeType() === 'standard'"
+              [class.border-renova-primaria]="selectedSize() === size.value && sizeType() === 'standard'"
+              [class.text-white]="selectedSize() === size.value && sizeType() === 'standard'"
+              [class.bg-white]="selectedSize() !== size.value || sizeType() !== 'standard'"
+              [class.border-slate-200]="selectedSize() !== size.value || sizeType() !== 'standard'"
+              [class.text-slate-600]="selectedSize() !== size.value || sizeType() !== 'standard'"
               [class.opacity-50]="sizeType() !== 'standard'">
-              {{ size }}
+              {{ size.label }}
             </button>
           }
         </div>
+
+        
       </div>
 
       <!-- Opção 2: Numéricos -->
@@ -157,7 +159,7 @@
         
         <div class="mt-3 pl-8">
           <input type="text" [ngModel]="numericSizesInput()" (ngModelChange)="numericSizesInput.set($event)" name="numericSizesInput"
-            [disabled]="sizeType() !== 'numeric'" placeholder="Ex: 36, 38, 40, 42 (separe por vírgula)"
+            [disabled]="sizeType() !== 'numeric'" placeholder="Ex: 36"
             class="w-full rounded-xl border border-slate-200 px-4 py-3 text-sm text-slate-700 outline-none transition-all placeholder:text-slate-300 focus:border-renova-primaria focus:ring-1 focus:ring-renova-primaria disabled:bg-slate-50 disabled:text-slate-400" />
         </div>
       </div>
