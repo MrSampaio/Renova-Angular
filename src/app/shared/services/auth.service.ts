@@ -3,10 +3,10 @@ import { isPlatformBrowser } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { Observable, of, tap } from 'rxjs';
 import { environment } from '../../../environments/environment.development';
-import { AuthRequest } from '../interfaces/auth-request';
-import { LoginResponse } from '../interfaces/login-response';
+import { AuthRequest } from '../models/auth-request.model';
+import { LoginResponse } from '../models/login-response.model';
 import { signUpRequest } from '../../features/sign-up/sign-up-request';
-import { UserProfile } from '../interfaces/user-profile';
+import { UserProfile } from '../models/user-profile.model';
 
 @Injectable({
     providedIn: 'root'  

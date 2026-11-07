@@ -1,4 +1,4 @@
-import { UserRole } from "../../shared/interfaces/user-role";
+import { UserRole } from "../../shared/models/user-role";
 
 export interface signUpRequest {
     name: string;

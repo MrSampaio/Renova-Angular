@@ -1,6 +1,6 @@
 import { Component, signal } from '@angular/core';
-import { AuthService } from '../../shared/services/auth-service';
-import { AuthRequest } from '../../shared/interfaces/auth-request';
+import { AuthService } from '../../shared/services/auth.service';
+import { AuthRequest } from '../../shared/models/auth-request.model';
 import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';

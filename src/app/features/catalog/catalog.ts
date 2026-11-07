@@ -2,8 +2,8 @@ import { Component, Inject, OnInit, PLATFORM_ID, signal } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { finalize } from 'rxjs';
 import { ProductCard } from '../../shared/components/product-card/product-card';
-import { Product } from '../../shared/interfaces/product-model';
-import { ProductService } from '../../shared/services/product-service';
+import { Product } from '../../shared/models/product.model';
+import { ProductService } from '../../shared/services/product.service';
 
 @Component({
   selector: 'app-catalog',
