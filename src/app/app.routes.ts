@@ -1,4 +1,5 @@
 import { Routes } from '@angular/router';
+import { employeeGuard } from './core/guards/employee-guard';
 
 export const routes: Routes = [
   // rotas de tela cheia (sem sidebar)
@@ -29,14 +30,21 @@ export const routes: Routes = [
         title: 'Produtos | Renova Bazar'
       },
       {
-        path: 'new-product',
-        loadComponent: () => import('./features/new-product/new-product').then(c => c.NewProduct),
-        title: 'Cadastrar Produto'
+        path: 'employee',
+        canActivate: [employeeGuard],
+        children: [
+          {
+            path: 'new-product',
+            loadComponent: () => import('./features/employee/new-product/new-product').then(c => c.NewProduct),
+            title: 'Cadastrar Produto',
+          },
+          {
+            path: 'create-employee',
+            loadComponent: () => import('./features/employee/create-employee/create-employee').then(c => c.CreateEmployee),
+            title: 'Cadastrar Funcionário'
+          }
+        ]
       }
-
-      // À medida que for criando as novas telas, basta adicionar as rotas filhas aqui:
-      // { path: 'my-orders', loadComponent: ... },
-      // { path: 'profile', loadComponent: ... },
     ]
   },
 
