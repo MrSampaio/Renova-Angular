@@ -1,4 +1,5 @@
 import { Routes } from '@angular/router';
+import { employeeGuard } from './core/guards/employee-guard';
 
 export const routes: Routes = [
   // rotas de tela cheia (sem sidebar)
@@ -30,11 +31,12 @@ export const routes: Routes = [
       },
       {
         path: 'employee',
+        canActivate: [employeeGuard],
         children: [
           {
             path: 'new-product',
             loadComponent: () => import('./features/employee/new-product/new-product').then(c => c.NewProduct),
-            title: 'Cadastrar Produto'
+            title: 'Cadastrar Produto',
           },
           {
             path: 'create-employee',
