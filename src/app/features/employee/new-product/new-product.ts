@@ -2,10 +2,10 @@ import { Component, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
-import { ProductService } from '../../shared/services/product.service';
-import { CATEGORY_OPTIONS } from '../../shared/models/product-categories';
-import { CONDITION_OPTIONS } from '../../shared/models/product-conditions';
-import { STANDARD_SIZE_OPTIONS } from '../../shared/models/product-sizes';
+import { ProductService } from '../../../shared/services/product.service';
+import { CATEGORY_OPTIONS } from '../../../shared/models/product-categories';
+import { CONDITION_OPTIONS } from '../../../shared/models/product-conditions';
+import { STANDARD_SIZE_OPTIONS } from '../../../shared/models/product-sizes';
 
 @Component({
   selector: 'app-new-product',
