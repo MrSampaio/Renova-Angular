@@ -51,15 +51,13 @@
         </label>
       </div>
 
-      <!-- Grelha de Previews (Abaixo do Input) -->
       @if (imagePreviews().length > 0) {
         <div class="grid grid-cols-2 gap-4 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6">
           @for (preview of imagePreviews(); track $index) {
             <div class="relative flex aspect-square flex-col items-center justify-center rounded-xl border border-slate-200 bg-slate-50">
-              <!-- A Imagem -->
+
               <img [src]="preview" alt="Preview da roupa" class="h-full w-full rounded-xl object-cover shadow-sm" />
               
-              <!-- Botão de remover (X) -->
               <button type="button" (click)="removeImage($index)" 
                 class="absolute -right-2 -top-2 flex h-6 w-6 cursor-pointer items-center justify-center rounded-full bg-red-500 text-white shadow-md transition-transform hover:scale-110">
                 <i class="fa-solid fa-xmark text-xs" aria-hidden="true"></i>

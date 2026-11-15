@@ -18,7 +18,7 @@ interface ImageItem {
 @Component({
   selector: 'app-new-product',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterLink],
+  imports: [CommonModule, FormsModule],
   templateUrl: './new-product.html',
 })
 export class NewProduct implements OnInit {
@@ -35,7 +35,10 @@ export class NewProduct implements OnInit {
   conditions = CONDITION_OPTIONS;
   standardSizes = STANDARD_SIZE_OPTIONS;
 
+
   isEditMode = computed(() => this.productToEdit !== null);
+  isSubmitting = signal<boolean>(false);
+  errorMessage = signal<string>('');
 
   // unifica imagens já salvas no servidor e novos arquivos selecionados
   imageItems = signal<ImageItem[]>([]);
@@ -126,7 +129,14 @@ export class NewProduct implements OnInit {
     }
   }
 
-  onSubmit(): void {
+onSubmit(): void {
+    if (this.isSubmitting()) {
+      return;
+    }
+
+    this.isSubmitting.set(true);
+    this.errorMessage.set('');
+
     const formData = new FormData();
 
     formData.append('productName', this.name());
@@ -139,7 +149,6 @@ export class NewProduct implements OnInit {
     const finalSize = this.sizeType() === 'standard' ? this.selectedSize() : this.numericSizesInput();
     formData.append('size', finalSize);
 
-    // separa imagens antigas mantidas dos novos arquivos enviados
     this.imageItems().forEach(item => {
       if (item.existingUrl) {
         formData.append('existingImages', item.existingUrl);
@@ -151,15 +160,19 @@ export class NewProduct implements OnInit {
     if (this.isEditMode() && this.productToEdit) {
       this.productService.updateProduct(this.productToEdit.productId, formData).subscribe({
         next: (updatedProduct) => {
+          this.isSubmitting.set(false);
           this.productSaved.emit(updatedProduct);
         },
         error: (err) => {
-          console.error('Erro ao atualizar produto:', err);
+          this.isSubmitting.set(false);
+          this.errorMessage.set('Não foi possível salvar as alterações do produto.');
+          console.error('Error when trying to update product:', err);
         }
       });
     } else {
       this.productService.createProduct(formData).subscribe({
         next: (response) => {
+          this.isSubmitting.set(false);
           if (this.isModal) {
             this.productSaved.emit(response);
           } else {
@@ -167,6 +180,8 @@ export class NewProduct implements OnInit {
           }
         },
         error: (err) => {
+          this.isSubmitting.set(false);
+          this.errorMessage.set('Não foi possível cadastrar o produto.');
           console.error('Erro ao criar produto:', err);
         }
       });

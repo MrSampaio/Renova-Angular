@@ -39,6 +39,11 @@ export class Catalog implements OnInit {
     this.editingProduct.set(null);
   }
 
+  onDeleteProduct(product: Product): void {
+    // TODO: conectar com o endpoint DELETE /products/{id}
+    console.log('Apagar produto:', product);
+  }
+
   onProductUpdated(updatedProduct: Product): void {
     // Atualiza o card na lista imediatamente sem precisar recarregar a página
     this.products.update(list =>
