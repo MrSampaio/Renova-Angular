@@ -8,6 +8,8 @@ import { ProductService } from '../../shared/services/product.service';
 import { AuthService } from '../../shared/services/auth.service';
 import { CATEGORY_OPTIONS } from '../../shared/models/product-categories';
 import { NewProduct } from '../employee/new-product/new-product';
+import { Router } from '@angular/router';
+import { CartService } from '../../shared/services/cart.service';
 
 type SortOption = 'default' | 'price-asc' | 'price-desc';
 
@@ -19,6 +21,14 @@ type SortOption = 'default' | 'price-asc' | 'price-desc';
   styleUrl: './catalog.css',
 })
 export class Catalog implements OnInit {
+
+  constructor(
+    private readonly catalogService: ProductService,
+    private readonly authService: AuthService,
+    private readonly router: Router,
+    private readonly cartService: CartService,
+    @Inject(PLATFORM_ID) private readonly platformId: Object
+  ) {}
 
   products = signal<Product[]>([]);
   isLoading = signal<boolean>(false);
@@ -83,11 +93,6 @@ export class Catalog implements OnInit {
     return result;
   });
 
-  constructor(
-    private readonly catalogService: ProductService,
-    private readonly authService: AuthService,
-    @Inject(PLATFORM_ID) private readonly platformId: Object
-  ) {}
 
   ngOnInit(): void {
     if (isPlatformBrowser(this.platformId)) {
@@ -132,10 +137,6 @@ export class Catalog implements OnInit {
           }
         }
       });
-  }
-
-  onAddToCart(product: Product): void {
-    console.log('Produto adicionado ao carrinho:', product);
   }
 
   onEditProduct(product: Product): void {
@@ -186,6 +187,43 @@ export class Catalog implements OnInit {
         this.errorMessage.set('Não foi possível apagar o produto.');
         console.error('Error when trying to delete product:', err);
       }
+    });
+  }
+
+  cartFeedback = signal<{ message: string; type: 'success' | 'warning' } | null>(null);
+
+  private showCartFeedback(message: string, type: 'success' | 'warning'): void {
+    this.cartFeedback.set({ message, type });
+    setTimeout(() => {
+      this.cartFeedback.set(null);
+    }, 3500);
+  }
+
+  onAddToCart(product: Product): void {
+    const user = this.authService.currentUser();
+
+    if (!user) {
+      this.router.navigate(['/login'], {
+        queryParams: { returnUrl: '/catalog' },
+      });
+      return;
+    }
+
+    this.cartService.addToCart(product.productId).subscribe({
+      next: () => {
+        this.showCartFeedback(`"${product.productName}" foi adicionada ao carrinho!`, 'success');
+      },
+      error: (err) => {
+        if (err.status === 401 || err.status === 403) {
+          this.router.navigate(['/login'], {
+            queryParams: { returnUrl: '/catalog' },
+          });
+        } else if (err.status === 409) {
+          this.showCartFeedback('Esta peça já está no seu carrinho.', 'warning');
+        } else {
+          this.showCartFeedback('Não foi possível adicionar a peça ao carrinho.', 'warning');
+        }
+      },
     });
   }
 }
