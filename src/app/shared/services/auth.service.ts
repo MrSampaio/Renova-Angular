@@ -60,14 +60,14 @@ export class AuthService {
       .post<void>(`${this.apiUrl}/logout`, {}, { withCredentials: true })
       .pipe(
         finalize(() => {
+          localStorage.clear();
+          sessionStorage.clear();
           this.currentUser.set(null);
           this.router.navigate([redirectTo], { replaceUrl: true });
         })
       )
       .subscribe({
-        error: () => {
-            // ignora o erro caso o token já tenha expirado
-        },
+        error: (err) => console.error('Erro ao realizar logout no servidor:', err),
       });
   }
 }

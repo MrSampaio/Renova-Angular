@@ -1,13 +1,13 @@
-import { Component, OnInit, signal } from '@angular/core';
-import { Router, RouterLink, RouterLinkActive } from '@angular/router';
-import { AuthService } from '../../shared/services/auth.service'; // Ajuste o caminho se necessário
+import { Component, OnInit, computed, inject } from '@angular/core';
+import { RouterLink, RouterLinkActive } from '@angular/router';
+import { AuthService } from '../../shared/services/auth.service';
 import { UserRole } from '../../shared/models/user-role';
 
 export interface MenuItem {
   label: string;
   icon: string;
   route: string;
-  roles?: UserRole[]; 
+  roles?: UserRole[];
 }
 
 @Component({
@@ -16,62 +16,64 @@ export interface MenuItem {
   styleUrl: './sidebar-menu.css',
   templateUrl: './sidebar-menu.html',
 })
-export class SidebarMenu implements OnInit{
+export class SidebarMenu implements OnInit {
+  private readonly authService = inject(AuthService);
 
-    menuItems: MenuItem[] = [
+  readonly currentUser = this.authService.currentUser;
+  readonly isLoggedIn = computed(() => this.authService.currentUser() !== null);
+
+  menuItems: MenuItem[] = [
     {
       label: 'Área de produtos',
       icon: 'fa-solid fa-box-open',
-      route: '/catalog'
+      route: '/catalog',
     },
     {
       label: 'Meus pedidos',
       icon: 'fa-solid fa-cart-shopping',
       route: '/my-orders',
-      roles: [UserRole.CUSTOMER]
+      roles: [UserRole.CUSTOMER],
     },
     {
       label: 'Realizar novo pedido',
       icon: 'fa-regular fa-circle-plus',
       route: '/new-order',
-      roles: [UserRole.CUSTOMER]
+      roles: [UserRole.CUSTOMER],
     },
     {
       label: 'Visualizar pedidos',
       icon: 'fa-regular fa-rectangle-list',
       route: '/admin/orders',
-      roles: [UserRole.EMPLOYEE]
+      roles: [UserRole.EMPLOYEE],
     },
     {
       label: 'Cadastrar produto',
       icon: 'fa-solid fa-box-archive',
       route: '/employee/new-product',
-      roles: [UserRole.EMPLOYEE]
+      roles: [UserRole.EMPLOYEE],
     },
     {
       label: 'Cadastrar funcionário',
       icon: 'fa-solid fa-users',
       route: '/admin/new-employee',
-      roles: [UserRole.EMPLOYEE]
+      roles: [UserRole.EMPLOYEE],
     },
     {
       label: 'Minha conta',
       icon: 'fa-regular fa-user',
-      route: '/profile'
+      route: '/profile',
     },
     {
       label: 'Ajuda',
       icon: 'fa-regular fa-circle-question',
-      route: '/help'
-    }
+      route: '/help',
+    },
   ];
-
-  constructor(private router: Router, private authService: AuthService) {}
 
   ngOnInit(): void {
     if (!this.authService.currentUser()) {
       this.authService.fetchUser().subscribe({
-        error: (err) => console.error('Erro ao carregar perfil:', err)
+        error: (err) => console.error('Erro ao carregar perfil:', err),
       });
     }
   }
@@ -86,7 +88,6 @@ export class SidebarMenu implements OnInit{
   }
 
   logout(): void {
-    // depois faz a lógica de limpar o cookie da sessão
-    this.router.navigate(['/login']);
+    this.authService.logout('/login');
   }
 }
