@@ -83,7 +83,9 @@ export class ProductCard {
       return 'assets/placeholder.jpg';
     }
 
-    const url = this.product.imageUrls[0];
+    const url = this.product.imageUrls[0].replace(/^\/uploads/, '');
+
+    // const url = this.product.imageUrls[0];
     
     if (url.startsWith('http')) {
       return url;
