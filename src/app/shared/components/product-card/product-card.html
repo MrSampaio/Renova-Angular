@@ -4,18 +4,12 @@
          transition-all duration-300
          hover:-translate-y-1 hover:shadow-lg"
 >
-  <!-- Imagem do produto -->
   <div class="relative aspect-[4/5] w-full overflow-hidden bg-slate-100">
-   @if (!imageHasError && product.imageUrls && product.imageUrls.length > 0) {
+    @if (!imageHasError && product.imageUrls && product.imageUrls.length > 0) {
       <img
         [src]="getImageUrl()"
         [alt]="product.productName"
-        fill
-        sizes="(max-width: 639px) 100vw,
-               (max-width: 1023px) 50vw,
-               (max-width: 1279px) 33vw,
-               25vw"
-        class="object-cover transition-transform duration-500
+        class="h-full w-full object-cover transition-transform duration-500
                group-hover:scale-105"
         (error)="onImageError()"
       />
@@ -35,7 +29,6 @@
       </div>
     }
 
-    <!-- Status do produto -->
     @if (!isAvailable) {
       <span
         class="absolute left-3 top-3 rounded-full bg-white/95
@@ -47,7 +40,6 @@
     }
   </div>
 
-  <!-- Informações do produto -->
   <div class="flex flex-1 flex-col p-4 sm:p-5">
     <div class="flex-1">
       <h2
@@ -83,14 +75,35 @@
       </div>
     </div>
 
-    <div class="mt-5 h-12 w-full">
-      <app-button
-        [text]="buttonText"
-        [icon]="buttonIcon"
-        [disabled]="!isAvailable"
-        [btnClass]="buttonClass"
-        (onClick)="onAddToCart()"
-      />
+    <!-- Ações do Card -->
+    <div class="mt-5 min-h-12 w-full">
+      @if (isEmployee()) {
+        <div class="flex flex-col w-full gap-2">
+          <app-button
+            class="cursor-pointer flex-1"
+            text="Editar produto"
+            icon="fa-solid fa-pen-to-square"
+            [btnClass]="editButtonClass"
+            (onClick)="onEditProduct()"
+          />
+
+          <app-button
+            class="flex-1 cursor-pointer"
+            text="Apagar produto"
+            icon="fa-solid fa-trash"
+            [btnClass]="deleteButtonClass"
+            (onClick)="onDeleteProduct()"
+          />
+        </div>
+      } @else {
+        <app-button
+          [text]="buttonText"
+          [icon]="buttonIcon"
+          [disabled]="!isAvailable"
+          [btnClass]="buttonClass"
+          (onClick)="onAddToCart()"
+        />
+      }
     </div>
   </div>
 </article>
