@@ -1,7 +1,7 @@
 <section class="w-full">
   <div class="w-full">
 
-    <header class="mb-8">
+    <header class="mb-6">
       <h1 class="text-2xl font-bold text-slate-900 sm:text-3xl">
         Catálogo
       </h1>
@@ -10,6 +10,99 @@
         Confira as peças únicas disponíveis em nosso bazar.
       </p>
     </header>
+
+    <!-- Barra de Pesquisa e Filtros -->
+    <div class="mb-8 flex flex-col gap-3 lg:flex-row lg:items-center">
+      <div class="relative flex-1">
+        <i
+          class="fa-solid fa-magnifying-glass pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-sm text-slate-400"
+          aria-hidden="true"
+        ></i>
+
+        <input
+          type="text"
+          [ngModel]="searchTerm()"
+          (ngModelChange)="searchTerm.set($event)"
+          placeholder="Buscar produtos (ex: camisa, calça, vestido...)"
+          aria-label="Buscar produtos"
+          class="w-full rounded-xl border border-slate-200 bg-white py-3 pl-11 pr-10 text-sm text-slate-700 shadow-2xs outline-none transition-all placeholder:text-slate-400 focus:border-renova-primaria focus:ring-1 focus:ring-renova-primaria"
+        />
+
+        @if (searchTerm()) {
+          <button
+            type="button"
+            (click)="searchTerm.set('')"
+            aria-label="Limpar busca"
+            class="absolute right-3 top-1/2 flex h-6 w-6 -translate-y-1/2 cursor-pointer items-center justify-center rounded-full text-slate-400 transition-colors hover:bg-slate-100 hover:text-slate-600"
+          >
+            <i class="fa-solid fa-xmark text-xs" aria-hidden="true"></i>
+          </button>
+        }
+      </div>
+
+      <div class="flex flex-col gap-3 sm:flex-row sm:items-center">
+        <!-- Filtro de Categoria -->
+        <div class="relative sm:w-52">
+          <select
+            [ngModel]="selectedCategory()"
+            (ngModelChange)="selectedCategory.set($event)"
+            aria-label="Filtrar por categoria"
+            class="w-full cursor-pointer appearance-none rounded-xl border border-slate-200 bg-white py-3 pl-4 pr-10 text-sm font-medium text-slate-700 shadow-2xs outline-none transition-all focus:border-renova-primaria focus:ring-1 focus:ring-renova-primaria"
+          >
+            <option value="">Todas as categorias</option>
+            @for (cat of categories; track cat.value) {
+              <option [value]="cat.value">{{ cat.label }}</option>
+            }
+          </select>
+
+          <i
+            class="fa-solid fa-chevron-down pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-xs text-slate-500"
+            aria-hidden="true"
+          ></i>
+        </div>
+
+        <!-- Filtro de Status (Apenas Employee) -->
+        @if (isEmployee()) {
+          <div class="relative sm:w-48">
+            <select
+              [ngModel]="selectedStatus()"
+              (ngModelChange)="selectedStatus.set($event)"
+              aria-label="Filtrar por status"
+              class="w-full cursor-pointer appearance-none rounded-xl border border-slate-200 bg-white py-3 pl-4 pr-10 text-sm font-medium text-slate-700 shadow-2xs outline-none transition-all focus:border-renova-primaria focus:ring-1 focus:ring-renova-primaria"
+            >
+              <option value="">Todos os status</option>
+              @for (status of statusOptions; track status.value) {
+                <option [value]="status.value">{{ status.label }}</option>
+              }
+            </select>
+
+            <i
+              class="fa-solid fa-chevron-down pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-xs text-slate-500"
+              aria-hidden="true"
+            ></i>
+          </div>
+        }
+
+        <!-- Ordenar por Preço -->
+        <div class="relative sm:w-44">
+          <select
+            [ngModel]="sortBy()"
+            (ngModelChange)="sortBy.set($event)"
+            aria-label="Ordenar produtos por preço"
+            class="w-full cursor-pointer appearance-none rounded-xl border border-slate-200 bg-white py-3 pl-4 pr-10 text-sm font-medium text-slate-700 shadow-2xs outline-none transition-all focus:border-renova-primaria focus:ring-1 focus:ring-renova-primaria"
+          >
+            <option value="default">Ordenar por</option>
+            <option value="price-asc">Mais baratos</option>
+            <option value="price-desc">Mais caros</option>
+          </select>
+
+          <i
+            class="fa-solid fa-chevron-down pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-xs text-slate-500"
+            aria-hidden="true"
+          ></i>
+        </div>
+      </div>
+    </div>
 
     @if (isLoading()) {
       <div class="flex min-h-[50vh] w-full items-center justify-center">
@@ -50,11 +143,11 @@
           Tentar novamente
         </button>
       </div>
-    } @else if (products().length > 0) {
+    } @else if (filteredProducts().length > 0) {
       <div
         class="grid w-full grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5"
       >
-        @for (product of products(); track product.productId) {
+        @for (product of filteredProducts(); track product.productId) {
           <app-product-card
             [product]="product"
             (addToCart)="onAddToCart($event)"
@@ -76,33 +169,49 @@
           Nenhuma peça encontrada
         </h2>
 
-        <p class="mt-2 text-sm text-slate-500">
-          Novas peças serão adicionadas em breve.
-        </p>
+        @if (hasActiveFilters()) {
+          <p class="mt-2 text-sm text-slate-500">
+            Não encontramos roupas com os filtros selecionados.
+          </p>
+
+          <button
+            type="button"
+            (click)="clearFilters()"
+            class="mt-5 cursor-pointer rounded-xl border border-slate-200 bg-white px-5 py-2.5 text-sm font-bold text-slate-700 transition-colors hover:bg-slate-50"
+          >
+            Limpar filtros
+          </button>
+        } @else {
+          <p class="mt-2 text-sm text-slate-500">
+            Novas peças serão adicionadas em breve.
+          </p>
+        }
       </div>
     }
 
   </div>
 
+  <!-- Modal de Edição de Produto -->
   @if (editingProduct(); as product) {
-  <div
-    class="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 p-4 backdrop-blur-xs"
-    (click)="closeEditModal()"
-  >
     <div
-      class="relative max-h-[90vh] w-full max-w-4xl overflow-y-auto rounded-2xl bg-slate-50 p-6 shadow-2xl sm:p-8"
-      (click)="$event.stopPropagation()"
+      class="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 p-4 backdrop-blur-xs"
+      (click)="closeEditModal()"
     >
-      <app-new-product
-        [productToEdit]="product"
-        [isModal]="true"
-        (closeModal)="closeEditModal()"
-        (productSaved)="onProductUpdated($event)"
-      />
+      <div
+        class="relative max-h-[90vh] w-full max-w-4xl overflow-y-auto rounded-2xl bg-slate-50 p-6 shadow-2xl sm:p-8"
+        (click)="$event.stopPropagation()"
+      >
+        <app-new-product
+          [productToEdit]="product"
+          [isModal]="true"
+          (closeModal)="closeEditModal()"
+          (productSaved)="onProductUpdated($event)"
+        />
+      </div>
     </div>
-  </div>
   }
 
+  <!-- Modal de Confirmação de Exclusão -->
   @if (productToDelete(); as product) {
     <div
       class="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 p-4 backdrop-blur-xs"
@@ -151,5 +260,5 @@
         </div>
       </div>
     </div>
-}
+  }
 </section>
