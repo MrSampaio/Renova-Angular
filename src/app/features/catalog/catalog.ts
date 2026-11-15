@@ -184,7 +184,7 @@ export class Catalog implements OnInit {
         this.isDeleting.set(false);
         this.productToDelete.set(null);
         this.errorMessage.set('Não foi possível apagar o produto.');
-        console.error('Erro ao apagar produto:', err);
+        console.error('Error when trying to delete product:', err);
       }
     });
   }
