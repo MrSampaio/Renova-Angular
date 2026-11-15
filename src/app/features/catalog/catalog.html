@@ -58,6 +58,8 @@
           <app-product-card
             [product]="product"
             (addToCart)="onAddToCart($event)"
+            (editProduct)="onEditProduct($event)"
+            (deleteProduct)="onDeleteProduct($event)"
           />
         }
       </div>

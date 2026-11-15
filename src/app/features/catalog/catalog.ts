@@ -29,6 +29,14 @@ export class Catalog implements OnInit {
     }
   }
 
+  onEditProduct(product: Product): void {
+  // this.router.navigate(['/employee/edit-product', product.productId]);
+  }
+
+  onDeleteProduct(product: Product): void {
+    console.log('Apagar produto:', product);
+  } 
+
   loadProducts(): void {
     this.isLoading.set(true);
     this.errorMessage.set('');
