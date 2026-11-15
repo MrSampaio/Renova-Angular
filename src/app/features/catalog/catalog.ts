@@ -4,11 +4,12 @@ import { finalize } from 'rxjs';
 import { ProductCard } from '../../shared/components/product-card/product-card';
 import { Product } from '../../shared/models/product.model';
 import { ProductService } from '../../shared/services/product.service';
+import { NewProduct } from '../employee/new-product/new-product';
 
 @Component({
   selector: 'app-catalog',
   standalone: true,
-  imports: [ProductCard],
+  imports: [ProductCard, NewProduct],
   templateUrl: './catalog.html',
   styleUrl: './catalog.css',
 })
@@ -17,6 +18,7 @@ export class Catalog implements OnInit {
   products = signal<Product[]>([]);
   isLoading = signal<boolean>(false);
   errorMessage = signal<string>('');
+  editingProduct = signal<Product | null>(null);
 
   constructor(
     private readonly catalogService: ProductService,
@@ -30,12 +32,25 @@ export class Catalog implements OnInit {
   }
 
   onEditProduct(product: Product): void {
-  // this.router.navigate(['/employee/edit-product', product.productId]);
+    this.editingProduct.set(product);
+  }
+
+  closeEditModal(): void {
+    this.editingProduct.set(null);
   }
 
   onDeleteProduct(product: Product): void {
+    // TODO: conectar com o endpoint DELETE /products/{id}
     console.log('Apagar produto:', product);
-  } 
+  }
+
+  onProductUpdated(updatedProduct: Product): void {
+    // Atualiza o card na lista imediatamente sem precisar recarregar a página
+    this.products.update(list =>
+      list.map(p => (p.productId === updatedProduct.productId ? updatedProduct : p))
+    );
+    this.closeEditModal();
+  }
 
   loadProducts(): void {
     this.isLoading.set(true);

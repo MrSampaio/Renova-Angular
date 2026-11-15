@@ -83,4 +83,23 @@
     }
 
   </div>
+
+  @if (editingProduct(); as product) {
+  <div
+    class="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 p-4 backdrop-blur-xs"
+    (click)="closeEditModal()"
+  >
+    <div
+      class="relative max-h-[90vh] w-full max-w-4xl overflow-y-auto rounded-2xl bg-slate-50 p-6 shadow-2xl sm:p-8"
+      (click)="$event.stopPropagation()"
+    >
+      <app-new-product
+        [productToEdit]="product"
+        [isModal]="true"
+        (closeModal)="closeEditModal()"
+        (productSaved)="onProductUpdated($event)"
+      />
+    </div>
+  </div>
+}
 </section>
