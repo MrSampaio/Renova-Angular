@@ -101,5 +101,55 @@
       />
     </div>
   </div>
+  }
+
+  @if (productToDelete(); as product) {
+    <div
+      class="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 p-4 backdrop-blur-xs"
+      (click)="closeDeleteModal()"
+    >
+      <div
+        class="w-full max-w-md rounded-2xl bg-white p-6 shadow-2xl"
+        (click)="$event.stopPropagation()"
+      >
+        <div class="flex items-center gap-3 text-red-600">
+          <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-red-100">
+            <i class="fa-solid fa-trash text-base" aria-hidden="true"></i>
+          </div>
+          <h2 class="text-lg font-bold text-slate-900">
+            Apagar produto
+          </h2>
+        </div>
+
+        <p class="mt-4 text-sm text-slate-600">
+          Tem certeza que deseja apagar <strong class="text-slate-900">{{ product.productName }}</strong>? Essa ação removerá a peça e suas fotos permanentemente.
+        </p>
+
+        <div class="mt-6 flex flex-col-reverse justify-end gap-3 sm:flex-row">
+          <button
+            type="button"
+            [disabled]="isDeleting()"
+            (click)="closeDeleteModal()"
+            class="cursor-pointer rounded-xl border border-slate-200 bg-white px-5 py-2.5 text-sm font-bold text-slate-600 transition-colors hover:bg-slate-50 disabled:opacity-50"
+          >
+            Cancelar
+          </button>
+
+          <button
+            type="button"
+            [disabled]="isDeleting()"
+            (click)="confirmDeleteProduct()"
+            class="flex cursor-pointer items-center justify-center gap-2 rounded-xl bg-red-600 px-5 py-2.5 text-sm font-bold text-white transition-colors hover:bg-red-700 disabled:opacity-50"
+          >
+            @if (isDeleting()) {
+              <i class="fa-solid fa-spinner animate-spin" aria-hidden="true"></i>
+              <span>Apagando...</span>
+            } @else {
+              <span>Apagar produto</span>
+            }
+          </button>
+        </div>
+      </div>
+    </div>
 }
 </section>

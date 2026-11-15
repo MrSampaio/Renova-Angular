@@ -26,12 +26,14 @@ export class ProductService {
         return this.http.put<Product>(`${this.apiUrl}/${productId}`, formData);
     }
 
-    
-
     createProduct(data: FormData): Observable<Product> {
         return this.http.post<Product>(this.apiUrl, data, {
             withCredentials: true
         });
+    }
+
+    deleteProduct(productId: string): Observable<void> {
+        return this.http.delete<void>(`${this.apiUrl}/${productId}`);
     }
 
 }

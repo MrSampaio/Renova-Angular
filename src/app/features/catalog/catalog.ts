@@ -19,6 +19,8 @@ export class Catalog implements OnInit {
   isLoading = signal<boolean>(false);
   errorMessage = signal<string>('');
   editingProduct = signal<Product | null>(null);
+  productToDelete = signal<Product | null>(null);
+  isDeleting = signal<boolean>(false);
 
   constructor(
     private readonly catalogService: ProductService,
@@ -40,12 +42,43 @@ export class Catalog implements OnInit {
   }
 
   onDeleteProduct(product: Product): void {
-    // TODO: conectar com o endpoint DELETE /products/{id}
-    console.log('Apagar produto:', product);
+    this.productToDelete.set(product);
+  }
+
+  closeDeleteModal(): void {
+    if (this.isDeleting()) {
+      return;
+    }
+    this.productToDelete.set(null);
+  }
+
+  confirmDeleteProduct(): void {
+    const product = this.productToDelete();
+    if (!product || this.isDeleting()) {
+      return;
+    }
+
+    this.isDeleting.set(true);
+
+    this.catalogService.deleteProduct(product.productId).subscribe({
+      next: () => {
+        this.products.update(list =>
+          list.filter(p => p.productId !== product.productId)
+        );
+        this.isDeleting.set(false);
+        this.productToDelete.set(null);
+      },
+      error: (err) => {
+        this.isDeleting.set(false);
+        this.productToDelete.set(null);
+        this.errorMessage.set('Não foi possível apagar o produto.');
+        console.error('Erro ao apagar produto:', err);
+      }
+    });
   }
 
   onProductUpdated(updatedProduct: Product): void {
-    // Atualiza o card na lista imediatamente sem precisar recarregar a página
+    // atualiza o card na lista imediatamente sem precisar recarregar a página
     this.products.update(list =>
       list.map(p => (p.productId === updatedProduct.productId ? updatedProduct : p))
     );
