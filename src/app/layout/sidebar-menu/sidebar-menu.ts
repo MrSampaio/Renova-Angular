@@ -1,6 +1,7 @@
 import { Component, OnInit, computed, inject } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { AuthService } from '../../shared/services/auth.service';
+import { CartService } from '../../shared/services/cart.service';
 import { UserRole } from '../../shared/models/user-role';
 
 export interface MenuItem {
@@ -18,6 +19,7 @@ export interface MenuItem {
 })
 export class SidebarMenu implements OnInit {
   private readonly authService = inject(AuthService);
+  readonly cartService = inject(CartService);
 
   readonly currentUser = this.authService.currentUser;
   readonly isLoggedIn = computed(() => this.authService.currentUser() !== null);
@@ -29,14 +31,20 @@ export class SidebarMenu implements OnInit {
       route: '/catalog',
     },
     {
-      label: 'Meus pedidos',
+      label: 'Meu carrinho',
       icon: 'fa-solid fa-cart-shopping',
+      route: '/cart',
+      roles: [UserRole.CUSTOMER],
+    },
+    {
+      label: 'Meus pedidos',
+      icon: 'fa-regular fa-clock',
       route: '/my-orders',
       roles: [UserRole.CUSTOMER],
     },
     {
       label: 'Realizar novo pedido',
-      icon: 'fa-regular fa-circle-plus',
+      icon: 'fa-solid fa-bag-shopping',
       route: '/new-order',
       roles: [UserRole.CUSTOMER],
     },
