@@ -63,7 +63,7 @@ export class NewProduct implements OnInit {
   private populateForm(product: Product): void {
     this.name.set(product.productName);
     this.category.set(product.category);
-    this.price.set(product.price.toFixed(2).replace('.', ','));
+    this.price.set(this.formatCurrency(product.price));
     this.condition.set(product.condition);
     this.description.set(product.description || '');
 
@@ -137,6 +137,13 @@ onSubmit(): void {
     this.isSubmitting.set(true);
     this.errorMessage.set('');
 
+    const numericPrice = this.getNumericPrice();
+    if (numericPrice <= 0) {
+      this.isSubmitting.set(false);
+      this.errorMessage.set('Informe um preço válido maior que zero.');
+      return;
+    }
+
     const formData = new FormData();
 
     formData.append('productName', this.name());
@@ -186,5 +193,35 @@ onSubmit(): void {
         }
       });
     }
+  }
+
+  private formatCurrency(value: number): string {
+    return new Intl.NumberFormat('pt-BR', {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    }).format(value);
+  }
+
+  private getNumericPrice(): number {
+    const normalized = this.price().replace(/\./g, '').replace(',', '.');
+    const parsed = parseFloat(normalized);
+    return Number.isNaN(parsed) ? 0 : parsed;
+  }
+
+  onPriceInput(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    const digits = input.value.replace(/\D/g, '');
+
+    if (!digits) {
+      this.price.set('');
+      input.value = '';
+      return;
+    }
+
+    const numericValue = Number(digits) / 100;
+    const formatted = this.formatCurrency(numericValue);
+
+    this.price.set(formatted);
+    input.value = formatted;
   }
 }

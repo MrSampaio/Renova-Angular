@@ -104,8 +104,17 @@
         </label>
         <div class="relative">
           <span class="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-sm font-bold text-slate-700">R$</span>
-          <input id="price" type="text" [ngModel]="price()" (ngModelChange)="price.set($event)" name="price" placeholder="Ex: 45,00" required
-            class="w-full rounded-xl border border-slate-200 py-3 pl-12 pr-4 text-sm text-slate-700 outline-none transition-all placeholder:text-slate-300 focus:border-renova-primaria focus:ring-1 focus:ring-renova-primaria" />
+          <input
+            id="price"
+            type="text"
+            inputmode="numeric"
+            [value]="price()"
+            (input)="onPriceInput($event)"
+            name="price"
+            placeholder="0,00"
+            required
+            class="w-full rounded-xl border border-slate-200 py-3 pl-12 pr-4 text-sm text-slate-700 outline-none transition-all placeholder:text-slate-300 focus:border-renova-primaria focus:ring-1 focus:ring-renova-primaria"
+          />
         </div>
       </div>
 
