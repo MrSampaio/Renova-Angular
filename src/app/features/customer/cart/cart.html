@@ -1,0 +1,362 @@
+<section class="w-full">
+  <div class="mx-auto w-full max-w-7xl">
+
+    <!-- Cabeçalho -->
+    <header class="mb-8">
+      <h1 class="text-2xl font-bold text-slate-900 sm:text-3xl">
+        Meu Carrinho
+      </h1>
+      <p class="mt-2 text-sm text-slate-600 sm:text-base">
+        Selecione os produtos que deseja transformar em um novo pedido.
+      </p>
+    </header>
+
+    @if (items().length === 0) {
+      <!-- Estado Vazio -->
+      <div class="flex flex-col items-center justify-center rounded-2xl border border-dashed border-slate-300 bg-white px-6 py-16 text-center">
+        <div class="flex h-16 w-16 items-center justify-center rounded-full bg-slate-100 text-slate-400">
+          <i class="fa-solid fa-cart-shopping text-2xl" aria-hidden="true"></i>
+        </div>
+
+        <h2 class="mt-4 text-lg font-bold text-slate-800">
+          Seu carrinho está vazio
+        </h2>
+        <p class="mt-1 max-w-md text-sm text-slate-500">
+          Explore o catálogo do bazar e adicione as peças que deseja reservar.
+        </p>
+
+        <a
+          routerLink="/catalog"
+          class="mt-6 inline-flex items-center gap-2 rounded-xl bg-renova-primaria px-6 py-3 text-sm font-bold text-white shadow-sm transition-all hover:brightness-95"
+        >
+          <i class="fa-solid fa-shirt" aria-hidden="true"></i>
+          <span>Ir para o catálogo</span>
+        </a>
+      </div>
+    } @else {
+      <!-- Grid Principal: Itens à Esquerda | Resumo + Pagamento à Direita -->
+      <div class="grid grid-cols-1 items-start gap-6 lg:grid-cols-12">
+
+        <!-- Coluna Esquerda: Lista de Produtos -->
+        <div class="rounded-2xl border border-slate-200/80 bg-white p-5 shadow-xs sm:p-6 lg:col-span-7 xl:col-span-8">
+
+          <!-- Topo do Card -->
+          <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-100 pb-4">
+            <div class="flex items-center gap-3">
+              <button
+                type="button"
+                (click)="toggleSelectAll()"
+                [attr.aria-checked]="allAvailableSelected()"
+                role="checkbox"
+                aria-label="Selecionar todos os produtos disponíveis"
+                class="flex h-5 w-5 cursor-pointer items-center justify-center rounded-md border transition-colors"
+                [class.border-renova-primaria]="allAvailableSelected()"
+                [class.bg-renova-primaria]="allAvailableSelected()"
+                [class.text-white]="allAvailableSelected()"
+                [class.border-slate-300]="!allAvailableSelected()"
+                [class.bg-white]="!allAvailableSelected()"
+              >
+                @if (allAvailableSelected()) {
+                  <i class="fa-solid fa-check text-xs" aria-hidden="true"></i>
+                }
+              </button>
+
+              <h2 class="text-base font-bold text-slate-900 sm:text-lg">
+                Produtos no carrinho ({{ items().length }})
+              </h2>
+            </div>
+
+            <span class="text-xs font-medium text-slate-500 sm:text-sm">
+              Selecionados: <strong class="text-slate-700">{{ selectedCount() }} de {{ availableItems().length }}</strong>
+            </span>
+          </div>
+
+          <!-- Lista de Itens -->
+          <div class="divide-y divide-slate-100">
+            @for (product of items(); track product.productId) {
+              @let isAvailable = product.status === 'AVAILABLE';
+              @let checked = isSelected(product.productId);
+
+              <div
+                class="flex items-center gap-3 py-5 transition-opacity sm:gap-4"
+                [class.opacity-60]="!isAvailable"
+              >
+                <!-- Checkbox de Seleção -->
+                <button
+                  type="button"
+                  [disabled]="!isAvailable"
+                  (click)="toggleItem(product)"
+                  role="checkbox"
+                  [attr.aria-checked]="checked"
+                  [attr.aria-label]="'Selecionar ' + product.productName"
+                  class="flex h-6 w-6 shrink-0 items-center justify-center rounded-md border transition-colors"
+                  [class.cursor-pointer]="isAvailable"
+                  [class.cursor-not-allowed]="!isAvailable"
+                  [class.border-renova-primaria]="checked && isAvailable"
+                  [class.bg-renova-primaria]="checked && isAvailable"
+                  [class.text-white]="checked && isAvailable"
+                  [class.border-slate-300]="!checked || !isAvailable"
+                  [class.bg-white]="!checked || !isAvailable"
+                >
+                  @if (checked && isAvailable) {
+                    <i class="fa-solid fa-check text-xs" aria-hidden="true"></i>
+                  }
+                </button>
+
+                <!-- Miniatura da Roupa -->
+                <div class="h-20 w-20 shrink-0 overflow-hidden rounded-xl border border-slate-100 bg-slate-100 sm:h-24 sm:w-24">
+                  @if (!hasImageError(product.productId) && product.imageUrls && product.imageUrls.length > 0) {
+                    <img
+                      [src]="getImageUrl(product)"
+                      [alt]="product.productName"
+                      (error)="onImageError(product.productId)"
+                      class="h-full w-full object-cover"
+                    />
+                  } @else {
+                    <div class="flex h-full w-full items-center justify-center text-slate-400">
+                      <i class="fa-regular fa-image text-xl" aria-hidden="true"></i>
+                    </div>
+                  }
+                </div>
+
+                <!-- Detalhes + Ações -->
+                <div class="flex min-w-0 flex-1 flex-col justify-between self-stretch">
+                  <div class="flex items-start justify-between gap-2">
+                    <div class="min-w-0">
+                      <h3 class="truncate text-sm font-bold text-slate-900 sm:text-base" [title]="product.productName">
+                        {{ product.productName }}
+                      </h3>
+                      <p class="mt-0.5 text-xs text-slate-500 sm:text-sm">
+                        Tamanho: <strong class="font-semibold text-slate-700">{{ product.size }}</strong>
+                      </p>
+                    </div>
+
+                    <!-- Botão Remover Item -->
+                    <button
+                      type="button"
+                      [disabled]="removingItemId() === product.productId"
+                      (click)="removeItem(product.productId)"
+                      aria-label="Remover peça do carrinho"
+                      class="flex h-8 w-8 shrink-0 cursor-pointer items-center justify-center rounded-lg text-slate-400 transition-colors hover:bg-red-50 hover:text-red-600 disabled:opacity-50"
+                    >
+                      <i class="fa-regular fa-trash-can text-sm" aria-hidden="true"></i>
+                    </button>
+                  </div>
+
+                  <div class="mt-3 flex flex-wrap items-center justify-between gap-2">
+                    @if (isAvailable) {
+                      <span class="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 bg-slate-50 px-2.5 py-1 text-xs font-medium text-slate-600">
+                        <i class="fa-solid fa-tag text-[10px] text-renova-primaria" aria-hidden="true"></i>
+                        Peça única
+                      </span>
+                    } @else {
+                      <span class="inline-flex items-center gap-1.5 rounded-lg bg-amber-100 px-2.5 py-1 text-xs font-semibold text-amber-800">
+                        {{ product.status === 'RESERVED' ? 'Peça reservada' : 'Peça vendida' }}
+                      </span>
+                    }
+
+                    <span class="text-base font-bold text-slate-900 sm:text-lg">
+                      {{ product.price | currency:'BRL':'symbol':'1.2-2' }}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            }
+          </div>
+
+          <!-- Rodapé: Limpar Carrinho -->
+          <div class="mt-2 border-t border-slate-100 pt-4">
+            <button
+              type="button"
+              (click)="openClearCartModal()"
+              class="inline-flex cursor-pointer items-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-xs font-bold text-slate-600 transition-colors hover:border-red-200 hover:bg-red-50 hover:text-red-600 sm:text-sm"
+            >
+              <i class="fa-regular fa-trash-can" aria-hidden="true"></i>
+              <span>Limpar carrinho</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Coluna Direita: Resumo + Aviso de Reserva + Pagamento -->
+        <div class="flex flex-col gap-6 lg:col-span-5 xl:col-span-4">
+
+          <!-- Card 1: Resumo do Pedido -->
+          <div class="rounded-2xl border border-slate-200/80 bg-white p-5 shadow-xs sm:p-6">
+            <h2 class="text-base font-bold text-slate-900 sm:text-lg">
+              Resumo do pedido
+            </h2>
+
+            <div class="mt-5 space-y-3 text-sm">
+              <div class="flex items-center justify-between text-slate-600">
+                <span>Produtos selecionados ({{ selectedCount() }})</span>
+                <span class="font-semibold text-slate-900">
+                  {{ selectedTotal() | currency:'BRL':'symbol':'1.2-2' }}
+                </span>
+              </div>
+
+              <div class="flex items-center justify-between text-slate-600">
+                <span>Retirada</span>
+                <span class="font-bold text-renova-primaria">Grátis (na igreja)</span>
+              </div>
+            </div>
+
+            <div class="my-4 border-t border-slate-100"></div>
+
+            <div class="flex items-baseline justify-between">
+              <span class="text-base font-bold text-slate-900">Total</span>
+              <span class="text-2xl font-bold text-slate-900">
+                {{ selectedTotal() | currency:'BRL':'symbol':'1.2-2' }}
+              </span>
+            </div>
+
+            <!-- Selo Impacto Social -->
+            <div class="mt-5 flex items-center gap-3 rounded-xl bg-emerald-50/70 px-4 py-3 text-xs font-medium text-emerald-900">
+              <i class="fa-solid fa-seedling shrink-0 text-base text-renova-primaria" aria-hidden="true"></i>
+              <span>Sua compra contribui para projetos sociais.</span>
+            </div>
+
+            <!-- Aviso Importante sobre Reserva e Prazo de Retirada -->
+            <div
+              role="note"
+              class="mt-3 flex items-start gap-3 rounded-xl border border-amber-200/80 bg-amber-50/80 px-4 py-3 text-xs leading-relaxed text-amber-950"
+            >
+              <i class="fa-solid fa-circle-info mt-0.5 shrink-0 text-sm text-amber-600" aria-hidden="true"></i>
+              <p>
+                <strong>Atenção:</strong> este pedido funciona como uma <strong>reserva</strong> e a peça deve ser retirada presencialmente na <strong>igreja</strong>. Caso não seja retirada em até <strong>7 dias</strong>, a roupa volta a ficar disponível para que outras pessoas reservem.
+              </p>
+            </div>
+          </div>
+
+          <!-- Card 2: Método de Pagamento -->
+          <div class="rounded-2xl border border-slate-200/80 bg-white p-5 shadow-xs sm:p-6">
+            <h2 class="text-base font-bold text-slate-900 sm:text-lg">
+              Método de pagamento
+            </h2>
+            <p class="mt-1 text-xs text-slate-500">
+              Escolha como deseja pagar no momento da retirada.
+            </p>
+
+            <div class="mt-4 flex flex-col gap-2.5" role="radiogroup" aria-label="Método de pagamento">
+              @for (option of paymentOptions; track option.value) {
+                @let active = selectedPaymentMethod() === option.value;
+
+                <button
+                  type="button"
+                  role="radio"
+                  [attr.aria-checked]="active"
+                  (click)="selectedPaymentMethod.set(option.value)"
+                  class="flex w-full cursor-pointer items-center gap-3.5 rounded-xl border px-4 py-3 text-left transition-all"
+                  [class.border-renova-primaria]="active"
+                  [class.bg-emerald-50/40]="active"
+                  [class.border-slate-200]="!active"
+                  [class.bg-white]="!active"
+                  [class.hover:border-slate-300]="!active"
+                >
+                  <!-- Bolinha estilo Radio -->
+                  <span
+                    class="flex h-5 w-5 shrink-0 items-center justify-center rounded-full border-2 transition-colors"
+                    [class.border-renova-primaria]="active"
+                    [class.border-slate-300]="!active"
+                  >
+                    @if (active) {
+                      <span class="h-2.5 w-2.5 rounded-full bg-renova-primaria"></span>
+                    }
+                  </span>
+
+                  <i
+                    [class]="option.icon + ' w-5 text-center text-base'"
+                    [class.text-renova-primaria]="active"
+                    [class.text-slate-600]="!active"
+                    aria-hidden="true"
+                  ></i>
+
+                  <span
+                    class="text-sm font-semibold"
+                    [class.text-slate-900]="active"
+                    [class.text-slate-700]="!active"
+                  >
+                    {{ option.label }}
+                  </span>
+                </button>
+              }
+            </div>
+
+            <!-- Botão Finalizar Pedido -->
+            <div class="mt-6">
+              <app-button
+                text="Finalizar pedido"
+                icon="fa-solid fa-lock"
+                [disabled]="selectedCount() === 0 || isSubmitting()"
+                [btnClass]="submitButtonClass()"
+                (onClick)="finalizeOrder()"
+              />
+            </div>
+
+            <div class="mt-3.5 flex items-center justify-center gap-2 text-xs font-medium text-slate-500">
+              <i class="fa-solid fa-shield-halved text-renova-primaria" aria-hidden="true"></i>
+              <span>Seus dados estão seguros.</span>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    }
+
+  </div>
+
+    <!-- modal de Confirmação para Limpar Carrinho -->
+    @if (showClearCartModal()) {
+      <div
+        class="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 p-4 backdrop-blur-xs"
+        (click)="closeClearCartModal()"
+      >
+        <div
+          class="w-full max-w-md rounded-2xl bg-white p-6 shadow-2xl"
+          (click)="$event.stopPropagation()"
+        >
+          <div class="flex items-center gap-3 text-red-600">
+            <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-red-100">
+              <i class="fa-regular fa-trash-can text-base" aria-hidden="true"></i>
+            </div>
+            <h2 class="text-lg font-bold text-slate-900">
+              Limpar carrinho
+            </h2>
+          </div>
+
+          <p class="mt-4 text-sm text-slate-600">
+            Tem certeza que deseja remover todas as
+            <strong class="text-slate-900">
+              {{ items().length }} {{ items().length === 1 ? 'peça' : 'peças' }}
+            </strong>
+            do seu carrinho?
+          </p>
+
+          <div class="mt-6 flex flex-col-reverse justify-end gap-3 sm:flex-row">
+            <button
+              type="button"
+              [disabled]="isClearing()"
+              (click)="closeClearCartModal()"
+              class="cursor-pointer rounded-xl border border-slate-200 bg-white px-5 py-2.5 text-sm font-bold text-slate-600 transition-colors hover:bg-slate-50 disabled:opacity-50"
+            >
+              Cancelar
+            </button>
+
+            <button
+              type="button"
+              [disabled]="isClearing()"
+              (click)="confirmClearCart()"
+              class="flex cursor-pointer items-center justify-center gap-2 rounded-xl bg-red-600 px-5 py-2.5 text-sm font-bold text-white transition-colors hover:bg-red-700 disabled:opacity-50"
+            >
+              @if (isClearing()) {
+                <i class="fa-solid fa-spinner animate-spin" aria-hidden="true"></i>
+                <span>Limpando...</span>
+              } @else {
+                <span>Limpar tudo</span>
+              }
+            </button>
+          </div>
+        </div>
+      </div>
+    }
+</section>

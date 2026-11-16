@@ -6,7 +6,7 @@ import { Observable, catchError, finalize, of, tap } from 'rxjs';
 import { environment } from '../../../environments/environment.development';
 import { AuthRequest } from '../models/auth-request.model';
 import { LoginResponse } from '../models/login-response.model';
-import { signUpRequest } from '../../features/sign-up/sign-up-request';
+import { signUpRequest } from '../models/sign-up-request';
 import { UserProfile } from '../models/user-profile.model';
 
 @Injectable({
