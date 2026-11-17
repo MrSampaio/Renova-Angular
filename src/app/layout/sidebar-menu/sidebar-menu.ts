@@ -48,10 +48,29 @@ export class SidebarMenu implements OnInit {
       route: '/new-order',
       roles: [UserRole.CUSTOMER],
     },
+    // {
+    //   label: 'Visualizar pedidos',
+    //   icon: 'fa-regular fa-rectangle-list',
+    //   route: '/admin/orders',
+    //   roles: [UserRole.EMPLOYEE],
+    // },
+    // {
+    //   label: 'Cadastrar produto',
+    //   icon: 'fa-solid fa-box-archive',
+    //   route: '/employee/new-product',
+    //   roles: [UserRole.EMPLOYEE],
+    // },
+    // {
+    //   label: 'Cadastrar funcionário',
+    //   icon: 'fa-solid fa-users',
+    //   route: '/admin/new-employee',
+    //   roles: [UserRole.EMPLOYEE],
+    // },
+
     {
       label: 'Visualizar pedidos',
       icon: 'fa-regular fa-rectangle-list',
-      route: '/admin/orders',
+      route: '/employee/orders',
       roles: [UserRole.EMPLOYEE],
     },
     {
@@ -63,9 +82,10 @@ export class SidebarMenu implements OnInit {
     {
       label: 'Cadastrar funcionário',
       icon: 'fa-solid fa-users',
-      route: '/admin/new-employee',
+      route: '/employee/create-employee',
       roles: [UserRole.EMPLOYEE],
     },
+
     {
       label: 'Minha conta',
       icon: 'fa-regular fa-user',
