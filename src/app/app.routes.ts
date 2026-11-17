@@ -44,6 +44,11 @@ export const routes: Routes = [
             loadComponent: () => import('./features/customer/cart/cart').then(c => c.Cart),
             title: 'Meu Carrinho | Renova Bazar',
           },
+          {
+            path: 'my-orders',
+            loadComponent: () => import('./features/customer/my-orders/my-orders').then(c => c.MyOrders),
+            title: 'Meus Pedidos | Renova Bazar',
+          }
         ],
       },
 

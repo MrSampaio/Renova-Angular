@@ -43,7 +43,6 @@ export class MyOrders implements OnInit {
       .subscribe({
         next: (data) => {
           this.orders.set(data);
-          // Abre automaticamente o primeiro pedido (mais recente)
           if (data.length > 0) {
             this.expandedOrderIds.set(new Set([data[0].orderId]));
           }
