@@ -57,6 +57,11 @@ export const routes: Routes = [
         canActivate: [employeeGuard],
         children: [
           {
+            path: 'orders',
+            loadComponent: () => import('./features/employee/orders/orders').then(c => c.EmployeeOrders),
+            title: 'Pedidos | Renova Bazar',
+          },
+          {
             path: 'new-product',
             loadComponent: () => import('./features/employee/new-product/new-product').then(c => c.NewProduct),
             title: 'Cadastrar Produto | Renova Bazar',
