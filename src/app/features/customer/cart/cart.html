@@ -283,6 +283,11 @@
 
             <!-- Botão Finalizar Pedido -->
             <div class="mt-6">
+              @if (errorMessage()) {
+                <div class="mt-4 rounded-xl border border-red-200 bg-red-50 px-3.5 py-2.5 text-xs font-medium text-red-700">
+                  {{ errorMessage() }}
+                </div>
+              }
               <app-button
                 text="Finalizar pedido"
                 icon="fa-solid fa-lock"
