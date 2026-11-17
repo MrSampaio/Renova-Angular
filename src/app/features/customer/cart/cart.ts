@@ -5,6 +5,7 @@ import { CartService } from '../../../shared/services/cart.service';
 import { Product } from '../../../shared/models/product.model';
 import { Button } from '../../../shared/components/button/button';
 import { environment } from '../../../../environments/environment.development';
+import { OrderService } from '../../../shared/services/order.service';
 
 export type PaymentMethod = 'CASH' | 'DEBIT_CARD' | 'CREDIT_CARD' | 'PIX';
 
@@ -24,7 +25,9 @@ export class Cart implements OnInit {
   readonly cartService = inject(CartService);
   private readonly router = inject(Router);
   private readonly apiUrl = environment.apiUrl;
+  private readonly orderService = inject(OrderService);
 
+  errorMessage = signal<string>('');
   selectedIds = signal<Set<string>>(new Set());
   selectedPaymentMethod = signal<PaymentMethod>('PIX');
   isSubmitting = signal<boolean>(false);
@@ -226,10 +229,28 @@ export class Cart implements OnInit {
       return;
     }
 
-    const payload = {
-      productIds: Array.from(this.selectedIds()),
-      paymentMethod: this.selectedPaymentMethod(),
-    };
+    this.isSubmitting.set(true);
+    this.errorMessage.set('');
 
+    this.orderService
+      .createOrder({
+        productIds: Array.from(this.selectedIds()),
+        paymentMethod: this.selectedPaymentMethod(),
+      })
+      .subscribe({
+        next: () => {
+          this.isSubmitting.set(false);
+          this.selectedIds.set(new Set());
+          this.router.navigate(['/my-orders']);
+        },
+        error: (err) => {
+          this.isSubmitting.set(false);
+          this.errorMessage.set(
+            err.error?.message || 'Não foi possível concluir sua reserva. Tente novamente.'
+          );
+          // recarrega o carrinho para refletir caso alguma peça tenha acabado de ser reservada
+          this.cartService.loadCart().subscribe();
+        },
+      });
   }
 }
