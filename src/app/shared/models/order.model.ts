@@ -11,6 +11,9 @@ export interface CreateOrderRequest {
 export interface Order {
   orderId: string;
   orderNumber: number;
+  customerName: string;
+  customerEmail: string;
+  customerPhone: string;
   items: Product[];
   totalPrice: number;
   paymentMethod: PaymentMethod;

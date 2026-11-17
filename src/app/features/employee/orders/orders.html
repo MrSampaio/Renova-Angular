@@ -1,0 +1,360 @@
+<section class="w-full">
+  <div class="mx-auto w-full max-w-6xl">
+
+    <header class="mb-6">
+      <h1 class="text-2xl font-bold text-slate-900 sm:text-3xl">
+        Pedidos e Reservas
+      </h1>
+      <p class="mt-2 text-sm text-slate-600 sm:text-base">
+        Gerencie as reservas feitas pelos clientes e confirme as retiradas na igreja.
+      </p>
+    </header>
+
+    <!-- Barra de Busca e Abas de Status -->
+    <div class="mb-8 flex flex-col gap-4">
+      <div class="relative">
+        <i
+          class="fa-solid fa-magnifying-glass pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-sm text-slate-400"
+          aria-hidden="true"
+        ></i>
+
+        <input
+          type="text"
+          [ngModel]="searchTerm()"
+          (ngModelChange)="searchTerm.set($event)"
+          placeholder="Buscar por nº do pedido (ex: 1001), nome do cliente ou peça..."
+          aria-label="Buscar pedidos"
+          class="w-full rounded-xl border border-slate-200 bg-white py-3 pl-11 pr-10 text-sm text-slate-700 shadow-2xs outline-none transition-all placeholder:text-slate-400 focus:border-renova-primaria focus:ring-1 focus:ring-renova-primaria"
+        />
+
+        @if (searchTerm()) {
+          <button
+            type="button"
+            (click)="searchTerm.set('')"
+            aria-label="Limpar busca"
+            class="absolute right-3 top-1/2 flex h-6 w-6 -translate-y-1/2 cursor-pointer items-center justify-center rounded-full text-slate-400 transition-colors hover:bg-slate-100 hover:text-slate-600"
+          >
+            <i class="fa-solid fa-xmark text-xs" aria-hidden="true"></i>
+          </button>
+        }
+      </div>
+
+      <!-- Abas de Filtro por Status -->
+      <div class="flex flex-wrap gap-2">
+        <button
+          type="button"
+          (click)="selectedStatus.set('ALL')"
+          class="cursor-pointer rounded-xl border px-4 py-2 text-xs font-bold transition-colors sm:text-sm"
+          [class.border-renova-primaria]="selectedStatus() === 'ALL'"
+          [class.bg-renova-primaria]="selectedStatus() === 'ALL'"
+          [class.text-white]="selectedStatus() === 'ALL'"
+          [class.border-slate-200]="selectedStatus() !== 'ALL'"
+          [class.bg-white]="selectedStatus() !== 'ALL'"
+          [class.text-slate-600]="selectedStatus() !== 'ALL'"
+        >
+          Todos ({{ statusCounts().ALL }})
+        </button>
+
+        <button
+          type="button"
+          (click)="selectedStatus.set('RESERVED')"
+          class="cursor-pointer rounded-xl border px-4 py-2 text-xs font-bold transition-colors sm:text-sm"
+          [class.border-amber-600]="selectedStatus() === 'RESERVED'"
+          [class.bg-amber-600]="selectedStatus() === 'RESERVED'"
+          [class.text-white]="selectedStatus() === 'RESERVED'"
+          [class.border-slate-200]="selectedStatus() !== 'RESERVED'"
+          [class.bg-white]="selectedStatus() !== 'RESERVED'"
+          [class.text-slate-600]="selectedStatus() !== 'RESERVED'"
+        >
+          Aguardando retirada ({{ statusCounts().RESERVED }})
+        </button>
+
+        <button
+          type="button"
+          (click)="selectedStatus.set('COMPLETED')"
+          class="cursor-pointer rounded-xl border px-4 py-2 text-xs font-bold transition-colors sm:text-sm"
+          [class.border-emerald-700]="selectedStatus() === 'COMPLETED'"
+          [class.bg-emerald-700]="selectedStatus() === 'COMPLETED'"
+          [class.text-white]="selectedStatus() === 'COMPLETED'"
+          [class.border-slate-200]="selectedStatus() !== 'COMPLETED'"
+          [class.bg-white]="selectedStatus() !== 'COMPLETED'"
+          [class.text-slate-600]="selectedStatus() !== 'COMPLETED'"
+        >
+          Retirados ({{ statusCounts().COMPLETED }})
+        </button>
+
+        <button
+          type="button"
+          (click)="selectedStatus.set('CANCELLED')"
+          class="cursor-pointer rounded-xl border px-4 py-2 text-xs font-bold transition-colors sm:text-sm"
+          [class.border-red-600]="selectedStatus() === 'CANCELLED'"
+          [class.bg-red-600]="selectedStatus() === 'CANCELLED'"
+          [class.text-white]="selectedStatus() === 'CANCELLED'"
+          [class.border-slate-200]="selectedStatus() !== 'CANCELLED'"
+          [class.bg-white]="selectedStatus() !== 'CANCELLED'"
+          [class.text-slate-600]="selectedStatus() !== 'CANCELLED'"
+        >
+          Cancelados ({{ statusCounts().CANCELLED }})
+        </button>
+      </div>
+    </div>
+
+    @if (isLoading()) {
+      <div class="flex min-h-[45vh] w-full items-center justify-center">
+        <div class="flex flex-col items-center gap-3 text-renova-primaria" role="status">
+          <i class="fa-solid fa-spinner animate-spin text-3xl" aria-hidden="true"></i>
+          <p class="text-sm font-medium">Carregando pedidos...</p>
+        </div>
+      </div>
+    } @else if (errorMessage()) {
+      <div class="rounded-2xl border border-red-200 bg-red-50 px-6 py-10 text-center" role="alert">
+        <i class="fa-solid fa-circle-exclamation text-3xl text-red-500" aria-hidden="true"></i>
+        <p class="mt-3 font-medium text-red-700">{{ errorMessage() }}</p>
+        <button
+          type="button"
+          (click)="loadOrders()"
+          class="mt-5 cursor-pointer rounded-xl bg-red-600 px-5 py-2.5 text-sm font-bold text-white transition-colors hover:bg-red-700"
+        >
+          Tentar novamente
+        </button>
+      </div>
+    } @else if (filteredOrders().length === 0) {
+      <div class="rounded-2xl border border-dashed border-slate-300 bg-white px-6 py-16 text-center">
+        <i class="fa-regular fa-rectangle-list text-4xl text-slate-300" aria-hidden="true"></i>
+        <h2 class="mt-4 text-lg font-bold text-slate-800">
+          Nenhum pedido encontrado
+        </h2>
+        <p class="mt-1 text-sm text-slate-500">
+          Não há registros para o filtro ou termo pesquisado no momento.
+        </p>
+      </div>
+    } @else {
+      <!-- Lista de Pedidos -->
+      <div class="flex flex-col gap-4">
+        @for (order of filteredOrders(); track order.orderId) {
+          @let expanded = isExpanded(order.orderId);
+          @let badge = getStatusConfig(order.status);
+          @let expired = isExpired(order);
+
+          <article class="overflow-hidden rounded-2xl border border-slate-200/80 bg-white shadow-xs transition-all">
+            <!-- Cabeçalho -->
+            <button
+              type="button"
+              (click)="toggleExpand(order.orderId)"
+              [attr.aria-expanded]="expanded"
+              class="flex w-full cursor-pointer flex-wrap items-center justify-between gap-4 px-5 py-5 text-left transition-colors hover:bg-slate-50/70 sm:px-6"
+            >
+              <!-- Pedido + Cliente -->
+              <div class="min-w-[220px]">
+                <div class="flex flex-wrap items-center gap-2">
+                  <h2 class="text-base font-bold text-slate-900 sm:text-lg">
+                    Pedido #{{ order.orderNumber }}
+                  </h2>
+                  <span class="text-xs font-medium text-slate-400">•</span>
+                  <span class="text-sm font-semibold text-slate-700">
+                    {{ order.customerName }}
+                  </span>
+                </div>
+                <p class="mt-0.5 text-xs text-slate-500">
+                  Realizado em {{ formatDate(order.createdAt) }} • Pagamento: <strong class="text-slate-700">{{ getPaymentLabel(order.paymentMethod) }}</strong>
+                </p>
+              </div>
+
+              <!-- Status + Alerta de Prazo Expirado -->
+              <div class="flex flex-wrap items-center gap-2">
+                <span
+                  class="inline-flex items-center gap-2 rounded-full border px-3.5 py-1 text-xs font-semibold"
+                  [class]="badge.classes"
+                >
+                  <i [class]="badge.icon" aria-hidden="true"></i>
+                  <span>{{ badge.label }}</span>
+                </span>
+
+                @if (expired) {
+                  <span class="inline-flex items-center gap-1.5 rounded-full border border-red-200 bg-red-50 px-3 py-1 text-xs font-bold text-red-700">
+                    <i class="fa-solid fa-triangle-exclamation" aria-hidden="true"></i>
+                    <span>Prazo de 7 dias vencido</span>
+                  </span>
+                }
+              </div>
+
+              <!-- Total + Seta -->
+              <div class="ml-auto flex items-center gap-5 sm:ml-0">
+                <div class="text-right">
+                  <span class="block text-xs font-medium text-slate-400">Total</span>
+                  <span class="text-base font-bold text-slate-900 sm:text-lg">
+                    {{ order.totalPrice | currency:'BRL':'symbol':'1.2-2' }}
+                  </span>
+                </div>
+
+                <i
+                  class="fa-solid fa-chevron-down text-xs text-slate-500 transition-transform duration-200"
+                  [class.rotate-180]="expanded"
+                  aria-hidden="true"
+                ></i>
+              </div>
+            </button>
+
+            <!-- Conteúdo Expandido -->
+            @if (expanded) {
+              <div class="border-t border-slate-100 bg-slate-50/40 px-5 py-5 sm:px-6">
+                <!-- Dados de Contato do Cliente -->
+                <div class="mb-4 flex flex-wrap items-center justify-between gap-3 rounded-xl border border-slate-200/70 bg-white px-4 py-3 text-xs text-slate-600 sm:text-sm">
+                  <div class="flex flex-wrap items-center gap-x-5 gap-y-1">
+                    <span>
+                      <i class="fa-regular fa-user mr-1.5 text-slate-400" aria-hidden="true"></i>
+                      <strong>{{ order.customerName }}</strong>
+                    </span>
+                    <span>
+                      <i class="fa-regular fa-envelope mr-1.5 text-slate-400" aria-hidden="true"></i>
+                      {{ order.customerEmail }}
+                    </span>
+                    @if (order.customerPhone) {
+                      <span>
+                        <i class="fa-solid fa-phone mr-1.5 text-slate-400" aria-hidden="true"></i>
+                        {{ order.customerPhone }}
+                      </span>
+                    }
+                  </div>
+
+                  <span>
+                    Retirada até: <strong [class.text-red-600]="expired">{{ formatDate(order.expiresAt) }}</strong>
+                  </span>
+                </div>
+
+                <!-- Lista de Peças -->
+                <div class="divide-y divide-slate-100 rounded-xl border border-slate-100 bg-white px-4">
+                  @for (item of order.items; track item.productId) {
+                    <div class="flex items-center gap-4 py-3.5">
+                      <div class="h-14 w-14 shrink-0 overflow-hidden rounded-xl border border-slate-100 bg-slate-100 sm:h-16 sm:w-16">
+                        @if (!hasImageError(item.productId) && item.imageUrls && item.imageUrls.length > 0) {
+                          <img
+                            [src]="getImageUrl(item)"
+                            [alt]="item.productName"
+                            (error)="onImageError(item.productId)"
+                            class="h-full w-full object-cover"
+                          />
+                        } @else {
+                          <div class="flex h-full w-full items-center justify-center text-slate-400">
+                            <i class="fa-regular fa-image" aria-hidden="true"></i>
+                          </div>
+                        }
+                      </div>
+
+                      <div class="min-w-0 flex-1">
+                        <p class="truncate text-sm font-bold text-slate-900">
+                          {{ item.productName }}
+                        </p>
+                        <p class="mt-0.5 text-xs text-slate-500">
+                          Tamanho: <strong class="font-semibold text-slate-700">{{ item.size }}</strong>
+                        </p>
+                      </div>
+
+                      <span class="text-sm font-bold text-slate-900">
+                        {{ item.price | currency:'BRL':'symbol':'1.2-2' }}
+                      </span>
+                    </div>
+                  }
+                </div>
+
+                <!-- Ações do Funcionário -->
+                @if (order.status === 'RESERVED') {
+                  <div class="mt-4 flex flex-col-reverse justify-end gap-3 sm:flex-row">
+                    <button
+                      type="button"
+                      (click)="openActionModal(order, 'CANCEL', $event)"
+                      class="flex cursor-pointer items-center justify-center gap-2 rounded-xl border border-red-200 bg-white px-5 py-2.5 text-xs font-bold text-red-600 transition-colors hover:bg-red-50 sm:text-sm"
+                    >
+                      <i class="fa-solid fa-xmark" aria-hidden="true"></i>
+                      <span>Cancelar reserva</span>
+                    </button>
+
+                    <button
+                      type="button"
+                      (click)="openActionModal(order, 'COMPLETE', $event)"
+                      class="flex cursor-pointer items-center justify-center gap-2 rounded-xl bg-renova-primaria px-5 py-2.5 text-xs font-bold text-white shadow-xs transition-all hover:brightness-95 sm:text-sm"
+                    >
+                      <i class="fa-solid fa-check" aria-hidden="true"></i>
+                      <span>Confirmar retirada e pagamento</span>
+                    </button>
+                  </div>
+                }
+              </div>
+            }
+          </article>
+        }
+      </div>
+    }
+
+  </div>
+
+  <!-- Modal de Confirmação de Ação -->
+  @if (pendingAction(); as action) {
+    <div
+      class="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 p-4 backdrop-blur-xs"
+      (click)="closeActionModal()"
+    >
+      <div
+        class="w-full max-w-md rounded-2xl bg-white p-6 shadow-2xl"
+        (click)="$event.stopPropagation()"
+      >
+        @if (action.type === 'COMPLETE') {
+          <div class="flex items-center gap-3 text-renova-primaria">
+            <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-emerald-100">
+              <i class="fa-solid fa-circle-check text-base" aria-hidden="true"></i>
+            </div>
+            <h2 class="text-lg font-bold text-slate-900">
+              Confirmar retirada
+            </h2>
+          </div>
+
+          <p class="mt-4 text-sm text-slate-600">
+            Confirma que <strong class="text-slate-900">{{ action.order.customerName }}</strong> retirou e pagou o <strong class="text-slate-900">Pedido #{{ action.order.orderNumber }}</strong> ({{ getPaymentLabel(action.order.paymentMethod) }})? As peças serão marcadas como <strong class="text-slate-900">vendidas</strong>.
+          </p>
+        } @else {
+          <div class="flex items-center gap-3 text-red-600">
+            <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-red-100">
+              <i class="fa-solid fa-ban text-base" aria-hidden="true"></i>
+            </div>
+            <h2 class="text-lg font-bold text-slate-900">
+              Cancelar reserva
+            </h2>
+          </div>
+
+          <p class="mt-4 text-sm text-slate-600">
+            Tem certeza que deseja cancelar o <strong class="text-slate-900">Pedido #{{ action.order.orderNumber }}</strong>? Todas as peças voltarão a ficar <strong class="text-slate-900">disponíveis</strong> no catálogo.
+          </p>
+        }
+
+        <div class="mt-6 flex flex-col-reverse justify-end gap-3 sm:flex-row">
+          <button
+            type="button"
+            [disabled]="isProcessingAction()"
+            (click)="closeActionModal()"
+            class="cursor-pointer rounded-xl border border-slate-200 bg-white px-5 py-2.5 text-sm font-bold text-slate-600 transition-colors hover:bg-slate-50 disabled:opacity-50"
+          >
+            Voltar
+          </button>
+
+          <button
+            type="button"
+            [disabled]="isProcessingAction()"
+            (click)="confirmAction()"
+            class="flex cursor-pointer items-center justify-center gap-2 rounded-xl px-5 py-2.5 text-sm font-bold text-white transition-all disabled:opacity-50"
+            [class.bg-renova-primaria]="action.type === 'COMPLETE'"
+            [class.hover:brightness-95]="action.type === 'COMPLETE'"
+            [class.bg-red-600]="action.type === 'CANCEL'"
+            [class.hover:bg-red-700]="action.type === 'CANCEL'"
+          >
+            @if (isProcessingAction()) {
+              <i class="fa-solid fa-spinner animate-spin" aria-hidden="true"></i>
+              <span>Salvando...</span>
+            } @else {
+              <span>{{ action.type === 'COMPLETE' ? 'Confirmar retirada' : 'Cancelar reserva' }}</span>
+            }
+          </button>
+        </div>
+      </div>
+    </div>
+  }
+</section>

@@ -28,4 +28,26 @@ export class OrderService {
       withCredentials: true,
     });
   }
+  
+  getAllOrders(): Observable<Order[]> {
+    return this.http.get<Order[]>(this.apiUrl, {
+      withCredentials: true,
+    });
+  }
+
+  completeOrder(orderId: string): Observable<Order> {
+    return this.http.patch<Order>(
+      `${this.apiUrl}/${orderId}/complete`,
+      {},
+      { withCredentials: true }
+    );
+  }
+
+  cancelOrder(orderId: string): Observable<Order> {
+    return this.http.patch<Order>(
+      `${this.apiUrl}/${orderId}/cancel`,
+      {},
+      { withCredentials: true }
+    );
+  }
 }
